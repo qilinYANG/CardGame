@@ -1,13 +1,14 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
+// An abstraction for a general game.
 public abstract class Game {
     private Scanner scan = new Scanner(System.in);
 
     protected int playerCount;
-    private ArrayList<PokerPlayer> players = new ArrayList<PokerPlayer>();
+    protected ArrayList<PokerPlayer> players = new ArrayList<PokerPlayer>();
 
-    public void registerPlayers() {
+    final void registerPlayers() {
         // Input player count
         playerCount = Utils.safeIntInput("How many players? (1-10)", 1, 10);
         System.out.println("\n");
