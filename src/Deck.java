@@ -33,7 +33,7 @@ public class Deck {
                         break;                                                
                 
                     default:
-                        valueTmp = ((Integer)idx_2).toString();
+                        valueTmp = ((Integer)(idx_2 + 1)).toString();
                         break;
                 }
 
@@ -57,5 +57,13 @@ public class Deck {
     
     public void reset() {
         deck = new ArrayList<PokerCard>(deckOri);
+    }
+
+    public String toString() {
+        String tmp = "";
+        for (int idx = 0; idx < deck.size(); idx++) {
+            tmp += deck.get(idx) + "\n";
+        }
+        return tmp;
     }
 }
