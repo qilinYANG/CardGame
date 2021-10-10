@@ -1,57 +1,53 @@
 import java.util.ArrayList;
 
+// An abstraction of a poker game player.
 public class PokerPlayer extends Player{
-    private String identity;
-    private int score, balance,bet;
-    private ArrayList<ArrayList<PokerCard>> handCard;
-    public PokerPlayer(String name, String identity, int score, int balance,int bet){
-        this.name = name;
-        setIdentity(identity);
-        setScore(score);
-        setBalance(balance);
-        setBet(bet);
-        ArrayList<ArrayList<PokerCard>> handCard = new ArrayList<>(0);
-        setHandCard(handCard);
+    private boolean isDealer;
+    private double balance, bet;
+    private ArrayList<PokerCard> hand;
 
+    public PokerPlayer(String name){
+        setName(name);
+        hand = new ArrayList<PokerCard>(0);
     }
 
-    public String getIdentity() {
-        return identity;
+    public boolean isDealer() {
+        return isDealer;
     }
 
-    public void setIdentity(String identity) {
-        this.identity = identity;
+    public void setDealer() {
+        isDealer = true;
     }
 
-    public int getScore() {
-        return score;
+    public void setNonDealer() {
+        isDealer = false;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public int getBalance() {
-        return balance;
-    }
-
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
-    public int getBet() {
-        return bet;
+    public double getBalance() {
+        return balance;
     }
 
-    public void setBet(int bet) {
+    public void setBet(double bet) {
         this.bet = bet;
     }
 
-    public ArrayList<ArrayList<PokerCard>> getHandCard() {
-        return handCard;
+    public double getBet() {
+        return bet;
     }
 
-    public void setHandCard(ArrayList<ArrayList<PokerCard>> handCard) {
-        this.handCard = handCard;
+    public void addCard(PokerCard card) {
+        hand.add(card);
+    }
+
+    public void clearHand() {
+        hand.clear();
+    }
+
+    public ArrayList<PokerCard> getHand() {
+        return hand;
     }
 }
