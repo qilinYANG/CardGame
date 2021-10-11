@@ -1,10 +1,11 @@
 public class PokerCard extends Card{
-    private int value,num;
+    private int value;
     private String type;
+    private boolean facestatus;
 
-    public PokerCard(int value, int num, String type){
+    public PokerCard(int value, String type,boolean facestatus){
         setValue(value);
-        setNum(num);
+        setFacestatus(facestatus);
         setType(type);
     }
     public int getValue() {
@@ -15,12 +16,12 @@ public class PokerCard extends Card{
         this.value = value;
     }
 
-    public int getNum() {
-        return num;
+    public boolean isFacestatus() {
+        return facestatus;
     }
 
-    public void setNum(int num) {
-        this.num = num;
+    public void setFacestatus(boolean facestatus) {
+        this.facestatus = facestatus;
     }
 
     public String getType() {
