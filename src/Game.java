@@ -7,7 +7,7 @@ public abstract class Game {
 
     protected int playerCount;
     protected ArrayList<PokerPlayer> players = new ArrayList<PokerPlayer>();
-
+//    protected ArrayList<PokerPlayer> players;
     final void registerPlayers() {
         // Input player count
         playerCount = Utils.safeIntInput("How many players? (1-10)", 1, 10);
@@ -20,5 +20,13 @@ public abstract class Game {
             players.add(player_tmp);
             System.out.println("Success!\n");
         }
+    }
+
+    public void setPlayers(ArrayList<PokerPlayer> players) {
+        this.players = players;
+    }
+
+    public ArrayList<PokerPlayer> getPlayers() {
+        return players;
     }
 }

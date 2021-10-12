@@ -17,23 +17,23 @@ public class Deck {
 
         deck = new ArrayList<PokerCard>();
         for (int idx_1 = 0; idx_1 < deckMultiplier; idx_1++) {
-            for (int idx_2 = 0; idx_2 < 13; idx_2++) {
+            for (int idx_2 = 1; idx_2 <= 13; idx_2++) {
                 String valueTmp;
                 switch (idx_2) {
-                    case 12:
+                    case 13:
                         valueTmp = "king";
                         break;
 
-                    case 11:
+                    case 12:
                         valueTmp = "queen";
                         break;
 
-                    case 10:
+                    case 11:
                         valueTmp = "jack";
                         break;                                                
                 
                     default:
-                        valueTmp = ((Integer)(idx_2 + 1)).toString();
+                        valueTmp = ((Integer)(idx_2)).toString();
                         break;
                 }
 
