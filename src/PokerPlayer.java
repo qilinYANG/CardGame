@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 // An abstraction of a poker game player.
 public class PokerPlayer extends Player{
-    private boolean isDealer;
+    private boolean isDealer=false;
     private double balance, bet;
     private ArrayList<PokerCard> hand;
 
@@ -32,7 +32,10 @@ public class PokerPlayer extends Player{
     }
 
     public void setBet(double bet) {
-        this.bet = bet;
+        if(balance<bet){
+            System.out.println("Not enough balance!");
+        }else{
+        this.bet = bet;}
     }
 
     public double getBet() {

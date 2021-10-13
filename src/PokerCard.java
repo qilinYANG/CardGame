@@ -23,7 +23,7 @@ public class PokerCard extends Card{
     private void setValue(String value) {
         if (value.equals("jack") ||
                 value.equals("queen") ||
-                value.equals("king")) {
+                value.equals("king")){
             this.value = value;
             return;
         }

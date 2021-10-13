@@ -5,6 +5,7 @@ public class PointGame extends Game {
 
     // 21 or 31 depending on which game
     protected int points;
+    Deck deck = new Deck(1);
 
     /**
      *
@@ -17,75 +18,59 @@ public class PointGame extends Game {
 
     public boolean isBust(PokerPlayer ppl) {
 
-        if (optimalPoint(ppl) == -1) return true;
+        if (ppl.getScore() == -1) return true;
         return false;
     }
 
 
 
     /**
-     * Dealer distribute card fist time
-     * @param players
-     * @param deck
-     * @param num
-     */
-    public void initCard(ArrayList<PokerPlayer> players, Deck deck, int num) {
-        for (PokerPlayer ppl : players) {
-            for (int i = 0; i < num; i++) {
-                ppl.addCard(deck.pop());
-            }
-        }
-    }
-
-    /**
      * Action player take in each turn
      * @param ppl
-     * @param action
-     * @param deck
      */
-    public void gameAction(PokerPlayer ppl, String action, Deck deck) {
-        switch (action) {
-            case "hit":
-                ppl.addCard(deck.pop());
-                break;
-            case "stand":
-                break;
-            case "doubleUp":
-                ppl.setBet(2 * ppl.getBet());
-                ppl.addCard(deck.pop());
-                break;
+    public void PlayerAction(PokerPlayer ppl) {
+        out:while(true){
+            System.out.println("Please select your action: 1. hit  2. split 3. double up  4. stand");
+            int index = Utils.safeIntInput("Please input your selection (1 to 4): ",1,4);
+            switch (index){
+                case 1:
+                    ppl.addCard(deck.pop());
+                    optimalPoint(ppl);
+                    if(isBust(ppl)){break out;}
+                    break;
+                case 2: break;
+                case 3:
+                    ppl.setBet(2*ppl.getBet());
+                    ppl.addCard(deck.pop());
+                    optimalPoint(ppl);
+                    if(isBust(ppl)){break out;}
+                    break;
+                case 4: break out;
+            }
 
         }
 
     }
 
-    /**
-     * Action player will take in each round
-     * @param sc
-     * @param ppl
-     * @param deck
-     */
-    public void actionLoop(Scanner sc, PokerPlayer ppl, Deck deck){
-        System.out.println("Take your next action 1.hit 2.stand 3. split 4 doubleUP: ");
-        String action = sc.next();
-        while(action.equals("hit")) gameAction(ppl,action,deck);
-    }
+
 
 
     /**
      * Calculate optimal total hand point
      * @param ppl
      * @return -1(bust) sum(point not BlackJack), 22 or 32 (BlackJack)
+     * updated by Junyi at Oct 12.
      */
 
-    public int optimalPoint(PokerPlayer ppl) {
+    public void optimalPoint(PokerPlayer ppl) {
         int sum = 0,sumWthAc = 0,AcNum = 0,sumtmp = 0;
 
         for (PokerCard pc : ppl.getHand()) {
             sum += Double.parseDouble(pc.getValue());
             if (pc.getValue().equals("1")) AcNum+=1;
         }
-        if(sum > points) return -1;
+        if(sum > points) {
+            ppl.setScore(-1);}
         else {
             sumWthAc = sum;
 
@@ -96,9 +81,9 @@ public class PointGame extends Game {
             }
             int sumOpt = sumWthAc > points? sumtmp:sumWthAc;
             if(sumOpt == points && AcNum == 1)
-                return points+1;
+                ppl.setScore(points+0.5);
             else
-                return sumOpt;
+                ppl.setScore(sumOpt);
         }
     }
 
@@ -112,7 +97,7 @@ public class PointGame extends Game {
         for (PokerCard pc : player.getHand()) {
             System.out.print(pc.getValue());
         }
-        System.out.println("Points: " + optimalPoint(player));
+        System.out.println("Points: " + player.getScore());
 
     }
 
@@ -120,14 +105,15 @@ public class PointGame extends Game {
      *
      * @param dealer
      * @param threshold
-     * @param deck
      * @return
      */
-    public int dealerHit(PokerPlayer dealer, int threshold,Deck deck) {
-        int curPoint = optimalPoint(dealer);
+    public double dealerHit(PokerPlayer dealer, int threshold) {
+        optimalPoint(dealer);
+        double curPoint = dealer.getScore();
         while(curPoint < threshold && curPoint != -1){
             dealer.addCard(deck.pop());
-            curPoint = optimalPoint(dealer);
+            optimalPoint(dealer);
+            curPoint = dealer.getScore();
         }
         return curPoint;
     }
@@ -139,8 +125,8 @@ public class PointGame extends Game {
      * @return
      */
     public String compare(PokerPlayer player, PokerPlayer dealer) {
-        if (optimalPoint(player) > optimalPoint(dealer)) return "Player";
-        if (optimalPoint(dealer) > optimalPoint(player)) return "Dealer";
+        if (player.getScore() > dealer.getScore()) return "Player";
+        if (dealer.getScore() > player.getScore()) return "Dealer";
         return "Draw";
 
     }

@@ -30,7 +30,7 @@ public class Deck {
 
                     case 11:
                         valueTmp = "jack";
-                        break;                                                
+                        break;
                 
                     default:
                         valueTmp = ((Integer)(idx_2)).toString();
@@ -43,7 +43,7 @@ public class Deck {
                 deck.add(new PokerCard("spade", valueTmp));
             }
         }
-
+        shuffle();
         deckOri = new ArrayList<PokerCard>(deck);
     }
 
