@@ -29,21 +29,21 @@ public class PointGame extends Game {
      * Action player take in each turn
      * @param ppl
      */
-    public void PlayerAction(PokerPlayer ppl) {
+    public void PlayerAction(PokerPlayer ppl,boolean tri) {
         out:while(true){
             System.out.println("Please select your action: 1. hit  2. split 3. double up  4. stand");
             int index = Utils.safeIntInput("Please input your selection (1 to 4): ", 1, 4);
             switch (index){
                 case 1:
                     ppl.addCard(deck.pop());
-                    optimalPoint(ppl);
+                    optimalPoint(ppl,tri);
                     if(isBust(ppl)){break out;}
                     break;
                 case 2: break;
                 case 3:
                     ppl.setBet(2*ppl.getBet());
                     ppl.addCard(deck.pop());
-                    optimalPoint(ppl);
+                    optimalPoint(ppl,tri);
                     if(isBust(ppl)){break out;}
                     break;
                 case 4: break out;
@@ -63,21 +63,23 @@ public class PointGame extends Game {
      * updated by Junyi at Oct 12.
      */
 
-    public void optimalPoint(PokerPlayer ppl) {
-        int sum = 0;
+    public void optimalPoint(PokerPlayer ppl,boolean tri) {
+        int sum = 0, AceNum = 0, sumWthAc = 0;
         boolean hasAce = false;
         ArrayList<PokerCard> hand = ppl.getHand();
 
         for (PokerCard pc : hand) {
             String value = pc.getValue();
-            if (value.equals("1")) hasAce = true;
+            if (value.equals("1")) {
+                hasAce = true;
+                AceNum += 1;
+            }
 
             if (value.equals("jack") ||
-                value.equals("queen") ||
-                value.equals("king")){
-                    sum += 10;
-            }
-            else {
+                    value.equals("queen") ||
+                    value.equals("king")) {
+                sum += 10;
+            } else {
                 sum += Double.parseDouble(value);
             }
         }
@@ -88,29 +90,25 @@ public class PointGame extends Game {
             return;
         }
 
-        // note: "If the hand consists of more than one Ace, only one Ace can count as 1."
-
-        // If already optimal
-        if ((!hasAce) || (sum + 10 > points)) {  // 10 = -1 + 11 (Ace can be 1 or 11)
-            ppl.setScore(sum);
+        if (tri) {
+            sum += 10 * (AceNum - 1);
+            if (sum > points) {
+                ppl.setScore(-1);
+                return;
+            } else {
+                sum += 10;
+            }
+        } else {
+            sumWthAc = sum;
+            int sumtmp = 0;
+            for (int i = 0; i < AceNum; i++) {
+                sumtmp = sumWthAc;
+                sumWthAc += 10;
+                if (sumWthAc > points) break;
+            }
+            ppl.setScore(sumtmp);
             return;
         }
-
-        sum += 10;  // Make it optimal
-
-        // If deserves a bonus
-        // note: A natural Blackjack is defined as the starting hand having a value of 21 (i.e. an Ace and any face card).
-        // note: A natural Trianta Ena is defined as a hand having a value of 31 (i.e. an Ace and two face cards).
-        // note: A face card is a playing card that is a king, queen, or jack of a suit.
-        boolean condition_1 = sum == points;
-        boolean condition_2 = (points - 1) / 10 == (float) hand.size();
-        if (condition_1 && condition_2) {
-            ppl.setScore(sum + 0.5);
-            return;
-        }
-        
-        ppl.setScore(sum);
-        return;
     }
 
     /**
@@ -134,13 +132,13 @@ public class PointGame extends Game {
      * @param dealer
      * @return
      */
-    public double dealerHit(PokerPlayer dealer) {
-        optimalPoint(dealer);
+    public double dealerHit(PokerPlayer dealer,boolean tri) {
+        optimalPoint(dealer,tri);
         int threshold = points-4;
         double curPoint = dealer.getScore();
         while(curPoint < threshold && curPoint != -1){
             dealer.addCard(deck.pop());
-            optimalPoint(dealer);
+            optimalPoint(dealer,tri);
             curPoint = dealer.getScore();
         }
         return curPoint;

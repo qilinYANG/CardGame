@@ -42,8 +42,8 @@ public class BlackJack extends PointGame{
             distribute_cards();
             printBoard();
             setBet();
-            PlayerAction(player);
-            dealerHit(dealer);
+            PlayerAction(player,false);
+            dealerHit(dealer,false);
             printBoard();
 
             if(player.getScore()==-1){
