@@ -48,6 +48,7 @@ public class PointGame extends Game {
                     break;
                 case 4: break out;
             }
+            printBoard();
 
         }
 

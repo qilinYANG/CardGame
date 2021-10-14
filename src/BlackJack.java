@@ -43,21 +43,26 @@ public class BlackJack extends PointGame{
     public void start_game(){
 
         while(true){
+            deck.shuffle();
             distribute_cards();
             printBoard();
             setBet();
             PlayerAction(player,false);
             dealerHit(dealer,false);
-            printBoard();
+            for(PokerCard card:dealer.getHand()){
+                card.setVisible();
+            }
 
             if(player.getScore()==-1){
                 updateBalance(player,dealer,"dealer");
             }else {
                 updateBalance(player,dealer,compare(player,dealer,false));
             }
+            printBoard();
 
             System.out.println("Do you want to continue?(y/n)");
             if(!scan.nextLine().equals("y")){break;}
+            deck.reset();
         }
 
     }

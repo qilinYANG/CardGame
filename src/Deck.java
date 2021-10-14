@@ -43,7 +43,7 @@ public class Deck {
                 deck.add(new PokerCard("spade", valueTmp));
             }
         }
-        shuffle();
+
         deckOri = new ArrayList<PokerCard>(deck);
     }
 
