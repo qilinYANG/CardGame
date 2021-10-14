@@ -177,11 +177,18 @@ public class PointGame extends Game {
         if (winner.equals("Player")) {
             player.setBalance(player.getBalance() + 2 * player.getBet());
             dealer.setBalance(dealer.getBalance() - 2 * player.getBet());
+            System.out.println("Winner is Player!");
         }
 
         if (winner.equals("Dealer")) {
             player.setBalance(player.getBalance() - player.getBet());
             dealer.setBalance(dealer.getBalance() + player.getBet());
+            System.out.println("Winner is Dealer!");
+        }
+
+        if(winner.equals("Draw")){
+            player.setBalance(player.getBalance()+player.getBet());
+            System.out.println("Draw!");
         }
 
     }
