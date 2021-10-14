@@ -117,7 +117,7 @@ public class PointGame extends Game {
      * @param player
      */
 
-    public void printBoard(PokerPlayer player) {
+    public void printBoard() {
         System.out.println("card list: ");
         for (PokerCard pc : player.getHand()) {
             System.out.print(pc.getValue());
@@ -129,11 +129,11 @@ public class PointGame extends Game {
     /**
      *
      * @param dealer
-     * @param threshold
      * @return
      */
-    public double dealerHit(PokerPlayer dealer, int threshold) {
+    public double dealerHit(PokerPlayer dealer) {
         optimalPoint(dealer);
+        int threshold = points-4;
         double curPoint = dealer.getScore();
         while(curPoint < threshold && curPoint != -1){
             dealer.addCard(deck.pop());
@@ -168,8 +168,8 @@ public class PointGame extends Game {
      * @param player
      * @param dealer
      */
-    public void updateBalance(PokerPlayer player, PokerPlayer dealer){
-        String winner = compare(player,dealer);
+    public void updateBalance(PokerPlayer player, PokerPlayer dealer,boolean dealerAdvantage){
+        String winner = compare(player,dealer,dealerAdvantage);
 
         if (winner.equals("Player")) {
             player.setBalance(player.getBalance() + 2 * player.getBet());

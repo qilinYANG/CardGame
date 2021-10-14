@@ -2,8 +2,8 @@ import java.util.Random;
 
 // Working on here
 public class BlackJack extends PointGame{
-    private Player player;
-    private Player dealer;
+    private PokerPlayer player;
+    private PokerPlayer dealer;
     public BlackJack(){
         super(21);
         int num=0;
@@ -25,17 +25,31 @@ public class BlackJack extends PointGame{
         if(size==1){
             PokerPlayer computer=new PokerPlayer("Computer");
             computer.setDealer();
+            dealer=computer;
             players.add(computer);
+            player=players.get(0);
         }else if(size==2){
             Random random=new Random();
             int index=random.nextInt(2);
             players.get(index).setDealer();
+            dealer=players.get(index);// 0 or 1
+            player=players.get(1-index);// 1 or 0
         }
     }
 
     public void start_game(){
-        distribute_cards();
 
+        while(true){
+            distribute_cards();
+            printBoard();
+            setBet();
+            PlayerAction(player);
+            dealerHit(dealer);
+            printBoard();
+            updateBalance(player,dealer,false);
+            System.out.println("Do you want to continue?(y/n)");
+            if(!scan.nextLine().equals("y")){break;}
+        }
 
     }
     public void distribute_cards(){
@@ -50,5 +64,22 @@ public class BlackJack extends PointGame{
                 man.addCard(deck.pop());
             }
         }
+    }
+    public void setBet(){
+        
+        System.out.println("Please input amount of currency you want to add to your bet (A number): ");
+        player.setBet(Double.parseDouble(scan.nextLine()));
+
+        while (true){
+            System.out.println("Player "+player.getName()+"'s current bet is: "+player.getBet());
+            System.out.println("Do you want to continue adding or withdrawing bet?(y/n)");
+            if(scan.nextLine().equals("y")){
+                System.out.println("Please input amount of currency you want to add or withdraw to your bet (A Positive or Negative number): ");
+                player.setBet(Double.parseDouble(scan.nextLine()));
+            }
+            break;
+        }
+
+
     }
 }
