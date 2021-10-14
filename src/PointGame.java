@@ -120,9 +120,11 @@ public class PointGame extends Game {
         System.out.println(dealer.print_hand()+"\n");
 
         for(PokerPlayer ppl: players){
-            System.out.println("Player "+ppl.getName()+"   Balance: "+ppl.getBalance());
-            System.out.println(ppl.print_hand());
-            System.out.println();
+            if(!ppl.isDealer()){
+                System.out.println("Player "+ppl.getName()+"   Balance: "+ppl.getBalance());
+                System.out.println(ppl.print_hand());
+                System.out.println();
+            }
         }
 
     }

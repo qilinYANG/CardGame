@@ -57,7 +57,9 @@ public class PokerPlayer extends Player{
         String hand_board="";
         for(PokerCard card:hand){
             if(card.isVisible()){
-                hand_board.concat(card.toString());
+                hand_board=hand_board.concat(" "+card.toString()+" ");
+            }else {
+                hand_board=hand_board.concat(" *** ");
             }
         }
         return hand_board;
