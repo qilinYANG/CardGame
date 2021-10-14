@@ -35,7 +35,7 @@ public class PokerPlayer extends Player{
         if(balance<bet){
             System.out.println("Not enough balance!");
         }else{
-        this.bet = bet;
+        this.bet += bet;
         balance-=bet;
         }
     }

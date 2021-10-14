@@ -41,11 +41,11 @@ public class PointGame extends Game {
                     break;
                 case 2: break;
                 case 3:
-                    ppl.setBet(2*ppl.getBet());
+                    ppl.setBet(ppl.getBet());
                     ppl.addCard(deck.pop());
                     optimalPoint(ppl,tri);
                     if(isBust(ppl)){break out;}
-                    break;
+                    break out;
                 case 4: break out;
             }
             printBoard();
