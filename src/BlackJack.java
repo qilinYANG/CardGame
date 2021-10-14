@@ -3,7 +3,6 @@ import java.util.Random;
 // Working on here
 public class BlackJack extends PointGame{
     private PokerPlayer player;
-    private PokerPlayer dealer;
     public BlackJack(){
         super(21);
         int num=0;
@@ -46,7 +45,13 @@ public class BlackJack extends PointGame{
             PlayerAction(player);
             dealerHit(dealer);
             printBoard();
-            updateBalance(player,dealer,false);
+
+            if(player.getScore()==-1){
+                updateBalance(player,dealer,"dealer");
+            }else {
+                updateBalance(player,dealer,compare(player,dealer,false));
+            }
+
             System.out.println("Do you want to continue?(y/n)");
             if(!scan.nextLine().equals("y")){break;}
         }
@@ -66,7 +71,7 @@ public class BlackJack extends PointGame{
         }
     }
     public void setBet(){
-        
+
         System.out.println("Please input amount of currency you want to add to your bet (A number): ");
         player.setBet(Double.parseDouble(scan.nextLine()));
 

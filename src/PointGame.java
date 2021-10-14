@@ -5,6 +5,7 @@ public class PointGame extends Game {
 
     // 21 or 31 depending on which game
     protected int points;
+    protected PokerPlayer dealer;
     Deck deck = new Deck(1);
 
     /**
@@ -114,15 +115,17 @@ public class PointGame extends Game {
 
     /**
      * Print list of cards and points at hand for each player
-     * @param player
      */
 
     public void printBoard() {
-        System.out.println("card list: ");
-        for (PokerCard pc : player.getHand()) {
-            System.out.print(pc.getValue());
+        System.out.println("Dealer: "+dealer.getName()+"   Balance: "+dealer.getBalance());
+        System.out.println(dealer.print_hand()+"\n");
+
+        for(PokerPlayer ppl: players){
+            System.out.println("Player "+ppl.getName()+"   Balance: "+ppl.getBalance());
+            System.out.println(ppl.print_hand());
+            System.out.println();
         }
-        System.out.println("Points: " + player.getScore());
 
     }
 
@@ -168,8 +171,7 @@ public class PointGame extends Game {
      * @param player
      * @param dealer
      */
-    public void updateBalance(PokerPlayer player, PokerPlayer dealer,boolean dealerAdvantage){
-        String winner = compare(player,dealer,dealerAdvantage);
+    public void updateBalance(PokerPlayer player, PokerPlayer dealer, String winner){
 
         if (winner.equals("Player")) {
             player.setBalance(player.getBalance() + 2 * player.getBet());

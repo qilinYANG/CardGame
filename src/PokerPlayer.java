@@ -53,4 +53,13 @@ public class PokerPlayer extends Player{
     public ArrayList<PokerCard> getHand() {
         return hand;
     }
+    public String print_hand(){
+        String hand_board="";
+        for(PokerCard card:hand){
+            if(card.isVisible()){
+                hand_board.concat(card.toString());
+            }
+        }
+        return hand_board;
+    }
 }
