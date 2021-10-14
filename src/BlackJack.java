@@ -48,12 +48,12 @@ public class BlackJack extends PointGame{
             printBoard();
             setBet();
             PlayerAction(player,false);
+            for(PokerCard card:dealer.getHand()){
+                card.setVisible();
             if(player.getScore()==-1){
                 updateBalance(player,dealer,"Dealer");
             }else {
                 dealerHit(dealer,false);
-                for(PokerCard card:dealer.getHand()){
-                    card.setVisible();
                 }
                 updateBalance(player,dealer,compare(player,dealer,false));
             }

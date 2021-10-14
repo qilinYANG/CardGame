@@ -122,7 +122,7 @@ public class PointGame extends Game {
 
         for(PokerPlayer ppl: players){
             if(!ppl.isDealer()){
-                System.out.println("Player "+ppl.getName()+"   Balance: "+ppl.getBalance());
+                System.out.println("Player "+ppl.getName()+"   Balance: "+ppl.getBalance()+"   Bet: "+ppl.getBet());
                 System.out.println(ppl.print_hand());
                 System.out.println();
             }
@@ -176,7 +176,7 @@ public class PointGame extends Game {
 
         if (winner.equals("Player")) {
             player.setBalance(player.getBalance() + 2 * player.getBet());
-            dealer.setBalance(dealer.getBalance() - 2 * player.getBet());
+            dealer.setBalance(dealer.getBalance() - player.getBet());
             System.out.println("Winner is Player!");
         }
 
