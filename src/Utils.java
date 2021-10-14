@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class Utils {
     static Scanner scan = new Scanner(System.in);
 
+    // Foolproof integer input
     public static int safeIntInput(String message, int min, int max) {
         int int_tmp;
 
