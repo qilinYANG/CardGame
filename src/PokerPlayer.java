@@ -3,7 +3,7 @@ import java.util.ArrayList;
 // An abstraction of a poker game player.
 public class PokerPlayer extends Player{
     private boolean isDealer=false;
-    private double balance, bet;
+    private double balance, bet=0;
     private ArrayList<PokerCard> hand;
 
     public PokerPlayer(String name){
@@ -31,7 +31,7 @@ public class PokerPlayer extends Player{
         return balance;
     }
 
-    public void setBet(double bet) {
+    public void addBet(double bet) {
         if(balance<bet){
             System.out.println("Not enough balance!");
         }else{
@@ -65,5 +65,8 @@ public class PokerPlayer extends Player{
             }
         }
         return hand_board;
+    }
+    public void clearBet(){
+        bet=0;
     }
 }

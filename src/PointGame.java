@@ -41,7 +41,7 @@ public class PointGame extends Game {
                     break;
                 case 2: break;
                 case 3:
-                    ppl.setBet(ppl.getBet());
+                    ppl.addBet(ppl.getBet());
                     ppl.addCard(deck.pop());
                     optimalPoint(ppl,tri);
                     if(isBust(ppl)){break out;}
@@ -181,7 +181,6 @@ public class PointGame extends Game {
         }
 
         if (winner.equals("Dealer")) {
-            player.setBalance(player.getBalance() - player.getBet());
             dealer.setBalance(dealer.getBalance() + player.getBet());
             System.out.println("Winner is Dealer!");
         }

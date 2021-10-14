@@ -64,6 +64,7 @@ public class BlackJack extends PointGame{
             player.clearHand();
             dealer.clearHand();
             deck.reset();
+            player.clearBet();
         }
 
     }
@@ -84,14 +85,14 @@ public class BlackJack extends PointGame{
 
         System.out.println("Please input amount of currency you want to add to your bet (A number): ");
         String bet=scan.next();
-        player.setBet(Double.parseDouble(bet));
+        player.addBet(Double.parseDouble(bet));
 
         while (true){
             System.out.println("Player "+player.getName()+"'s current bet is: "+player.getBet());
             System.out.println("Do you want to continue adding or withdrawing bet?(y/n)");
             if(scan.nextLine().equals("y")){
                 System.out.println("Please input amount of currency you want to add or withdraw to your bet (A Positive or Negative number): ");
-                player.setBet(Double.parseDouble(scan.nextLine()));
+                player.addBet(Double.parseDouble(scan.nextLine()));
             }
             break;
         }
