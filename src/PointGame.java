@@ -90,26 +90,29 @@ public class PointGame extends Game {
             ppl.setScore(-1);
             return;
         }
-
-        if (tri) {
-            sum += 10 * (AceNum - 1);
-            if (sum > points) {
-                ppl.setScore(-1);
-                return;
+        if(hasAce){
+            if (tri) {
+                sum += 10 * (AceNum - 1);
+                if (sum > points) {
+                    ppl.setScore(-1);
+                    return;
+                } else {
+                    sum += 10;
+                }
             } else {
-                sum += 10;
+                sumWthAc = sum;
+                int sumtmp = 0;
+                for (int i = 0; i < AceNum; i++) {
+                    sumtmp = sumWthAc;
+                    sumWthAc += 10;
+                    if (sumWthAc > points) break;
+                }
+                ppl.setScore(sumtmp);
+                return;
             }
-        } else {
-            sumWthAc = sum;
-            int sumtmp = 0;
-            for (int i = 0; i < AceNum; i++) {
-                sumtmp = sumWthAc;
-                sumWthAc += 10;
-                if (sumWthAc > points) break;
-            }
-            ppl.setScore(sumtmp);
-            return;
-        }
+        }else {ppl.setScore(sum);return;}
+
+
     }
 
     /**

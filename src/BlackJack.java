@@ -45,6 +45,7 @@ public class BlackJack extends PointGame{
         while(true){
             deck.shuffle();
             distribute_cards();
+            optimalPoint(player,false);
             printBoard();
             setBet();
             PlayerAction(player,false);
@@ -57,6 +58,7 @@ public class BlackJack extends PointGame{
                 dealerHit(dealer, false);
                 updateBalance(player, dealer, compare(player, dealer, false));
             }
+            player.clearBet();
             printBoard();
 
             System.out.println("Do you want to continue?(y/n)");
@@ -64,7 +66,7 @@ public class BlackJack extends PointGame{
             player.clearHand();
             dealer.clearHand();
             deck.reset();
-            player.clearBet();
+
         }
 
     }
