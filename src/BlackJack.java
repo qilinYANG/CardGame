@@ -55,38 +55,52 @@ public class BlackJack extends PointGame{
             // ----- //
             // Non-dealers' actions
             // ----- //
-            // The non-dealer places his/her bet
+            // The non-dealer places his/her bet and updates "realBalance"
+            double realBalance;
             if (players.get(0).isDealer()) {
                 playerSetBet(players.get(1));
+                realBalance = players.get(1).getBalance();
             }
             else {
                 playerSetBet(players.get(0));
+                realBalance = players.get(0).getBalance();
             }
 
             // note: if all non-dealers bust, then this round immediately ends.
             boolean allBust = true;
             int counter = 0;
             while (counter < players.size()) {
-                // Blackjack special: All non-dealers sync balance.
-                
                 PokerPlayer playerTmp = players.get(counter);
+
+                // Skip if is dealer
                 if (playerTmp.isDealer()) {
-                    counter+=1;
+                    counter += 1;
                     continue;
                 }
-                // If the player has enough money
-                // [...]
+
+                // Blackjack special: All non-dealers sync balance.
+                playerTmp.setBalance(realBalance);
+
+                // consider: "If the player has enough money"?
                 
                 // Demonstrate the board
                 printBoard();
                 // Perform the actions
-                PlayerAction(playerTmp, false, false);  // note: moved "optimalPoint(player, false)" into PlayerAction - case "stand"
+                PlayerAction(playerTmp, true, false);  // note: moved "optimalPoint(player, false)" into PlayerAction - case "stand"
+                
+                realBalance = playerTmp.getBalance();
+                
+                // If not principalPlayer, set balance to 0
+                if (counter >= 2) {
+                    playerTmp.setBalance(0);
+                }
 
                 // If anyone doesn't bust, then allBust is false
                 if (!isBust(playerTmp)) {
                     allBust = false;
                 }
                 counter += 1;
+                System.out.println(counter);
             }
             
             // If everyone busts, then the dealer trumps everyone
@@ -124,6 +138,8 @@ public class BlackJack extends PointGame{
             }
 
             // merge players if needed
+            MergePlayers();
+
 
             printBoard();
             playersClearHands();  // Everyone clears their hand
@@ -176,11 +192,19 @@ public class BlackJack extends PointGame{
 
     // For the "split" case
     public void MergePlayers() {
+        PokerPlayer principalPlayer;
 
-    }
+        if (players.get(0).isDealer()) {
+            principalPlayer = players.get(1);
+        }
+        else {
+            principalPlayer = players.get(0);
+        }
 
-    // For the "split" case
-    public void PlayersSyncBalance() {
-
+        for (int idx = 2; idx < players.size(); idx++) {
+            PokerPlayer playerTmp = players.get(idx);
+            System.out.println(playerTmp.getBalance());
+            principalPlayer.setBalance(principalPlayer.getBalance() + playerTmp.getBalance());
+        }
     }
 }

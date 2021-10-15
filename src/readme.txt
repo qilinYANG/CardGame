@@ -1,20 +1,27 @@
-Name: Chenwei Cui
-Email: ccui@bu.edu
-BU ID: U24658267
+Name: 
+Email: 
+BU ID: 
 
 Compilation and execution instruction:
 	1. javac .\Play.java
 	2. java Play
 
 Description of each class:
-	Board: An abstraction of the game board. Responsible for displaying the game, recording the players' moves. Also provides a method for checking the winner.
-	BoardGame: An abstraction of the general board game. TicTacToe and OrderAndChaos extends this class.
-	Menu: Manages the main loop and the choosing of games.
-	OrderAndChaos: The game of order and chaos. It is an extension of the class BoardGame. This class is responsible for logics that are specific to this game, for example the rule for determining the winner.
-	Play: This is the entrypoint of the games. It creates and runs a menu object.
-	Player: A class that keeps track of the information about a player, for example the player name, the player token, and the score.
-	Slot: Basic element that comprises the Board. Has a getter and a setter.
-	TicTacToe: The game of tic tac toe. It is an extension of the class BoardGame. This class is responsible for logics that are specific to this game, for example the rule for determining the winner.
+	BlackJack:
+	
+	Card:
+		A class that abstracts a physical card. Can be set visible or invisible.
+
+	PokerCard:
+		The abstraction of a poker card. It extends the Card class. A poker card has a suit and a value. The corresponding setters and getters are implemented. In addition, a toString method is provided which can be later used.
+
+	Deck:
+		The abstraction of a deck of poker cards. It utilizes the PokerCard class. The Deck provides a range of methods resembling a real deck of cards. For example, the deck can shuffle, pop the first card, and reset to the original state.
+	
+	Game:
+		The abstraction for a general game. It implements the common functionalities shared among games. For example registering 
+
+
 	Utils: A class that provides utility functions.
 
 
