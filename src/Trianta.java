@@ -43,15 +43,13 @@ public class Trianta extends PointGame{
             printBoard();
             player_setBet();
             distribute_cards("Second distribute");
-            for(PokerPlayer ppl:players){
-                optimalPoint(ppl,true);
-            }
 
             printBoard();
             player_setBet();
             boolean allbust=true;
             for(PokerPlayer ppl:players){
                 ppl.getHand().get(0).setVisible();
+                printBoard();
                 PlayerAction(ppl,false,true);
                 if(!isBust(ppl)){
                     allbust=false;
@@ -104,10 +102,8 @@ public class Trianta extends PointGame{
             }
         }else{
             for(PokerPlayer ppl: players){
-                if (!ppl.isDealer()) {
-                    ppl.addCard(deck.pop());
-                    ppl.addCard(deck.pop());
-                }
+                ppl.addCard(deck.pop());
+                ppl.addCard(deck.pop());
             }
         }
     }
@@ -117,7 +113,7 @@ public class Trianta extends PointGame{
             if(!ppl.isDealer()&&!isBust(ppl)){
                 System.out.println("------------------------------------");
                 System.out.println("Player "+ppl.getName()+"   balance: "+ppl.getBalance()+"  bet: "+ppl.getBet());
-                System.out.println("Card: "+ppl.getHand().get(0));
+                System.out.println("Card: "+ppl.getHand());
                 System.out.println("Please input the amount of bet you want to add: ");
                 String bet_tmp=scan.next();
                 ppl.addBet(Double.parseDouble(bet_tmp));
