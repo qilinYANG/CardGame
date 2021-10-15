@@ -2,12 +2,16 @@ import java.util.ArrayList;
 
 // An abstraction of a poker game player.
 public class PokerPlayer extends Player{
-    private boolean isDealer=false;
-    private double balance, bet=0;
+    private boolean isDealer;
+    private double balance;
+    private double bet;
     private ArrayList<PokerCard> hand;
 
     public PokerPlayer(String name){
         setName(name);
+        setNonDealer();
+        balance = 0;
+        bet = 0;
         hand = new ArrayList<PokerCard>(0);
     }
 
@@ -32,12 +36,11 @@ public class PokerPlayer extends Player{
     }
 
     public void addBet(double bet) {
-        if(balance<bet){
-            System.out.println("Not enough balance!");
-        }else{
-        this.bet += bet;
-        balance-=bet;
+        if (balance < bet) {
+            throw new IllegalArgumentException("Not enough balance!");
         }
+        this.bet += bet;
+        balance -= bet;
     }
 
     public double getBet() {
@@ -55,18 +58,21 @@ public class PokerPlayer extends Player{
     public ArrayList<PokerCard> getHand() {
         return hand;
     }
+
     public String print_hand(){
-        String hand_board="";
-        for(PokerCard card:hand){
-            if(card.isVisible()){
-                hand_board=hand_board.concat(" "+card.toString()+" ");
-            }else {
-                hand_board=hand_board.concat(" *** ");
+        String hand_board = "";
+        for(PokerCard card : hand){
+            if (card.isVisible()) {
+                hand_board = hand_board.concat(" [" + card.toString() + "] ");
+            }
+            else {
+                hand_board = hand_board.concat(" [***] ");
             }
         }
         return hand_board;
     }
+
     public void clearBet(){
-        bet=0;
+        bet = 0;
     }
 }
