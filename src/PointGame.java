@@ -161,16 +161,15 @@ public class PointGame extends Game {
      * @param dealer
      * @return
      */
-    public double dealerHit(PokerPlayer dealer, boolean aceRestricted) {
+    public void dealerHit(PokerPlayer dealer, boolean aceRestricted) {
         optimalPoint(dealer, aceRestricted);
         int threshold = points - 4;  // 17 for 21; 27 for 31
         double curPoint = dealer.getScore();
-        while(curPoint < threshold && curPoint != -1){
+        while ((curPoint < threshold) && (curPoint != -1)) {
             dealer.addCard(deck.pop());
             optimalPoint(dealer, aceRestricted);
             curPoint = dealer.getScore();
         }
-        return curPoint;
     }
 
     /**
