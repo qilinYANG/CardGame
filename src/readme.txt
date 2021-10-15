@@ -24,7 +24,7 @@ Description of each class:
 
 	Utils: A class that provides utility functions.
 
-
+    PointGame: Super class define common methods used by BlackJack and Trianta
 
 Any additional works or missed functionalities?
 	1. + Foolproof (User will get notified when inputted a wrong value, and it won't break the program.)

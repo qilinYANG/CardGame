@@ -15,7 +15,7 @@ public class PointGame extends Game {
         super();
         this.points = points;
     }
-    public void dummy(){}
+
     public boolean isBust(PokerPlayer ppl) {
         if (ppl.getScore() == -1) return true;
         return false;
