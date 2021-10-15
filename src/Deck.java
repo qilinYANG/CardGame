@@ -44,17 +44,21 @@ public class Deck {
             }
         }
 
+        // Backup the deck for reset() method
         deckOri = new ArrayList<PokerCard>(deck);
     }
 
+    // Shuffle the deck
     public void shuffle() {
         java.util.Collections.shuffle(deck);
     }
 
+    // Pop the first card in the deck
     public PokerCard pop() {
         return deck.remove(0);
     }
     
+    // Reset the deck
     public void reset() {
         deck = new ArrayList<PokerCard>(deckOri);
     }
