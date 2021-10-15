@@ -11,7 +11,7 @@ public class Trianta extends PointGame{
         public int compare(PokerPlayer a, PokerPlayer b){
             Double a_balance=a.getBalance();
             Double b_balance=b.getBalance();
-            return a_balance.compareTo(b_balance);
+            return b_balance.compareTo(a_balance);
         }
     }
 
@@ -48,13 +48,15 @@ public class Trianta extends PointGame{
             player_setBet();
             boolean allbust=true;
             for(PokerPlayer ppl:players){
-                ppl.getHand().get(0).setVisible();
-                printBoard();
-                PlayerAction(ppl,false,true);
-                if(!isBust(ppl)){
-                    allbust=false;
+                if(!ppl.isDealer()){
+                    ppl.getHand().get(0).setVisible();
+                    printBoard();
+                    PlayerAction(ppl,false,true);
+                    if(!isBust(ppl)){
+                        allbust=false;
+                    }
+                    ppl.getHand().get(0).setInvisible();
                 }
-                ppl.getHand().get(0).setInvisible();
             }
             if(allbust){
                 for(PokerPlayer ppl:players){
