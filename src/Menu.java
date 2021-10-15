@@ -12,7 +12,7 @@ public class Menu {
                 new BlackJack().startGame();
             }
             if (user_choice_tmp == 1) {
-                // new Trianta().startGame();
+                new Trianta().startGame();
             }
             
         } 
