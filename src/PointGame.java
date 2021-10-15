@@ -15,7 +15,7 @@ public class PointGame extends Game {
         super();
         this.points = points;
     }
-
+    public void dummy(){}
     public boolean isBust(PokerPlayer ppl) {
         if (ppl.getScore() == -1) return true;
         return false;
@@ -53,8 +53,11 @@ public class PointGame extends Game {
 
                 case 3:  // double up
                     // If has enough balance, else: notify and break (not break out)
-                    if (ppl.getBalance() < ppl.getBet()) {
-                        System.out.println("You cannot double up. Non-Sufficient Funds!");
+
+
+                    if(ppl.getBalance() < ppl.getBet()){
+                        System.out.println("Your Balance is not Enough");
+
                         break;
                     }
                     ppl.addBet(ppl.getBet());
