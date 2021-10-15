@@ -29,11 +29,11 @@ public class PointGame extends Game {
         out:while(true){
             int index;
             if (allowSplit) {
-                System.out.println("Please select your action:\n1. hit\n2. stand\n3. double up\n4. split");
+                System.out.println("Player " + ppl.getName() + ": Please select your action:\n1. hit\n2. stand\n3. double up\n4. split");
                 index = Utils.safeIntInput("Please input your selection (1 to 4): ", 1, 4);
             }
             else {
-                System.out.println("Please select your action:\n1. hit\n2. stand\n3. double up");
+                System.out.println("Player " + ppl.getName() + ": Please select your action:\n1. hit\n2. stand\n3. double up");
                 index = Utils.safeIntInput("Please input your selection (1 to 3): ", 1, 3);
             }
 
@@ -53,11 +53,8 @@ public class PointGame extends Game {
 
                 case 3:  // double up
                     // If has enough balance, else: notify and break (not break out)
-
-
                     if(ppl.getBalance() < ppl.getBet()){
                         System.out.println("Your Balance is not Enough");
-
                         break;
                     }
                     ppl.addBet(ppl.getBet());
@@ -67,10 +64,44 @@ public class PointGame extends Game {
                 
                 case 4: 
                     // If has enough balance
+                    boolean condition_1 = ppl.getBalance() < ppl.getBet();
                     // If has exactly two cards
+                    boolean condition_2 = ppl.getHand().size() == 2;
                     // If the cards are of the same rank
+                    boolean condition_3 = ppl.getHand().get(0) == ppl.getHand().get(1);
                     // otherwise: notify and break (not break out)
-                    throw new UnsupportedOperationException("Not implemented yet!");  // debug: Please implement this part.
+                    if (!(condition_1 && condition_2 && condition_3)) {
+                        System.out.print("You are not qualified to split!");
+                        break;
+                    }
+                    // Start Split
+                    // Create a new player
+                    PokerPlayer pplSplit = new PokerPlayer(ppl.getName());
+                    // Add the new player to players
+                    players.add(pplSplit);
+
+                    // ----- //
+                    // Money matters
+                    // ----- //
+                    // Current player loses money
+                    ppl.setBalance(ppl.getBalance() - ppl.getBet());
+                    // The money goes to the new player
+                    pplSplit.setBalance(ppl.getBet());
+                    // The new player places bet
+                    pplSplit.addBet(ppl.getBet());
+
+                    // ----- //
+                    // Deal cards
+                    // ----- //
+                    // Current player gives one of his/her card to the new player
+                    pplSplit.addCard(ppl.getHand().remove(0));
+                    // Deal a card to the current player
+                    ppl.addCard(deck.pop());
+                    // Deal a card to the new player
+                    pplSplit.addCard(deck.pop());
+
+                    // break, but not "break out"
+                    break;
             }
         }
     }
