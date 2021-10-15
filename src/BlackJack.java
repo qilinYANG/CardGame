@@ -48,7 +48,7 @@ public class BlackJack extends PointGame{
             optimalPoint(player,false);
             printBoard();
             setBet();
-            PlayerAction(player,false);
+            PlayerAction(player, false, false);
             for(PokerCard card:dealer.getHand()){
                 card.setVisible();
             }

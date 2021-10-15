@@ -7,7 +7,7 @@ public abstract class Game {
 
     protected int playerCount;
     protected ArrayList<PokerPlayer> players = new ArrayList<PokerPlayer>();
-//    protected ArrayList<PokerPlayer> players;
+
     final void registerPlayers(int num) {
         // Input player count
         playerCount = num;
