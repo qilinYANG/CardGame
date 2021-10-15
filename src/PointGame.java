@@ -7,24 +7,17 @@ public class PointGame extends Game {
     protected PokerPlayer dealer;
     Deck deck = new Deck(1);
 
-    /**
-     *
-     * @param points
-     */
+
     public PointGame(int points) {
         super();
         this.points = points;
     }
-    public void dummy(){}
+
     public boolean isBust(PokerPlayer ppl) {
         if (ppl.getScore() == -1) return true;
         return false;
     }
 
-    /**
-     * Action player take in each turn
-     * @param ppl
-     */
     public void PlayerAction(PokerPlayer ppl, boolean allowSplit, boolean aceRestricted) {
         out:while(true){
             int index;
@@ -68,7 +61,7 @@ public class PointGame extends Game {
                     // If has exactly two cards
                     boolean condition_2 = ppl.getHand().size() == 2;
                     // If the cards are of the same rank
-                    boolean condition_3 = true; // ppl.getHand().get(0) == ppl.getHand().get(1);  // debug: for testing
+                    boolean condition_3 = ppl.getHand().get(0) == ppl.getHand().get(1);
                     // otherwise: notify and break (not break out)
                     if (!(condition_1 && condition_2 && condition_3)) {
                         System.out.print("You are not qualified to split!");
@@ -107,12 +100,7 @@ public class PointGame extends Game {
         }
     }
 
-    /**
-     * Calculate optimal total hand point
-     * @param ppl, aceRestricted
-     * @return -1 (bust), sum, or 21.5 or 31.5 (Bonus case)
-     * updated by Junyi at Oct 12.
-     */
+    // Calculate optimal total hand point
     public void optimalPoint(PokerPlayer ppl, boolean aceRestricted) {
         int sum = 0; 
         int aceNum = 0;
@@ -189,9 +177,7 @@ public class PointGame extends Game {
         ppl.setScore(sum);
     }
 
-    /**
-     * Print list of cards and points at hand for each player
-     */
+    // Print list of cards and points at hand for each player
     public void printBoard() {
         System.out.println("Dealer: " + dealer.getName() + "   Balance: $" + dealer.getBalance());
         System.out.println(dealer.print_hand() + "\n");
@@ -204,11 +190,7 @@ public class PointGame extends Game {
         }
     }
 
-    /**
-     *
-     * @param dealer
-     * @return
-     */
+    // Dealer actions
     public void dealerHit(PokerPlayer dealer, boolean aceRestricted) {
         optimalPoint(dealer, aceRestricted);
         int threshold = points - 4;  // 17 for 21; 27 for 31
@@ -220,12 +202,6 @@ public class PointGame extends Game {
         }
     }
 
-    /**
-     *
-     * @param player
-     * @param dealer
-     * @return
-     */
     public String compare(PokerPlayer player, PokerPlayer dealer, boolean dealerAdvantage) {
         // note: (31) "In the case of a tie, the Dealer wins."
         // note: (31) "A natural 31 of the Banker results in the Banker winning the bets from all players."
@@ -240,12 +216,7 @@ public class PointGame extends Game {
 
     }
 
-    /**
-     * update Balance account
-     * @param player
-     * @param dealer
-     * @param winner
-     */
+    // update Balance account
     public void updateBalance(PokerPlayer player, PokerPlayer dealer, String winner) {
         // If player wins
         if (winner.equals("Player")) {
