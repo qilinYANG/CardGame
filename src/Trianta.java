@@ -64,15 +64,15 @@ public class Trianta extends PointGame{
                         updateBalance(ppl,dealer,"Dealer");
                     }
                 }
-            }
+            }else{
+                dealerHit(dealer,true);
 
-            dealerHit(dealer,true);
-
-            for(PokerPlayer ppl:players){
-                if(!ppl.isDealer()){
-                    updateBalance(ppl,dealer,compare(ppl,dealer,true));
-                    for(PokerCard card: ppl.getHand()){
-                        card.setVisible();
+                for(PokerPlayer ppl:players){
+                    if(!ppl.isDealer()){
+                        updateBalance(ppl,dealer,compare(ppl,dealer,true));
+                        for(PokerCard card: ppl.getHand()){
+                            card.setVisible();
+                        }
                     }
                 }
             }
