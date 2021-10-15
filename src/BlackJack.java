@@ -71,6 +71,7 @@ public class BlackJack extends PointGame{
                 
                 PokerPlayer playerTmp = players.get(counter);
                 if (playerTmp.isDealer()) {
+                    counter+=1;
                     continue;
                 }
                 // If the player has enough money
