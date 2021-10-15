@@ -45,26 +45,23 @@ public class BlackJack extends PointGame{
             // Init and shuffle the deck
             deck.reset();
             deck.shuffle();
-
-            // Deal cards
-            dealCards();
-
-            // Demonstrate the board
-            printBoard();
             
             // ----- //
             // Non-dealers' actions
             // ----- //
-            // The non-dealer places his/her bet and updates "realBalance"
-            double realBalance;
+            // Blackjack special: Determine the principal player
+            PokerPlayer principalPlayer;
             if (players.get(0).isDealer()) {
-                playerSetBet(players.get(1));
-                realBalance = players.get(1).getBalance();
+                principalPlayer = players.get(1);
             }
             else {
-                playerSetBet(players.get(0));
-                realBalance = players.get(0).getBalance();
+                principalPlayer = players.get(0);
             }
+            // The non-dealer places his/her bet
+            playerSetBet(principalPlayer);
+
+            // Deal cards
+            dealCards();
 
             // note: if all non-dealers bust, then this round immediately ends.
             boolean allBust = true;
@@ -78,20 +75,23 @@ public class BlackJack extends PointGame{
                     continue;
                 }
 
-                // Blackjack special: All non-dealers sync balance.
-                playerTmp.setBalance(realBalance);
-
-                // consider: "If the player has enough money"?
+                // Blackjack special:
+                // If he/she is not the principal player
+                if (counter >= 2) {
+                    // The principal player lends his/her money to the non-principal player
+                    playerTmp.setBalance(principalPlayer.getBalance());
+                }
                 
                 // Demonstrate the board
                 printBoard();
                 // Perform the actions
                 PlayerAction(playerTmp, true, false);  // note: moved "optimalPoint(player, false)" into PlayerAction - case "stand"
                 
-                realBalance = playerTmp.getBalance();
-                
-                // If not principalPlayer, set balance to 0
+                // Blackjack special:
+                // If he/she is not the principal player
                 if (counter >= 2) {
+                    // The non-principal player returns his/her money to the principal player                
+                    principalPlayer.setBalance(playerTmp.getBalance());
                     playerTmp.setBalance(0);
                 }
 
@@ -100,7 +100,6 @@ public class BlackJack extends PointGame{
                     allBust = false;
                 }
                 counter += 1;
-                System.out.println(counter);
             }
             
             // If everyone busts, then the dealer trumps everyone
@@ -137,9 +136,13 @@ public class BlackJack extends PointGame{
                 }
             }
 
-            // merge players if needed
-            MergePlayers();
-
+            // Blackjack special:
+            // Merge the principal player with the non-principal players
+            while (players.size() != 2) {
+                // Pop the first non-principal player
+                PokerPlayer playerTmp = players.remove(2);
+                principalPlayer.setBalance(principalPlayer.getBalance() + playerTmp.getBalance());
+            }
 
             printBoard();
             playersClearHands();  // Everyone clears their hand
@@ -187,24 +190,6 @@ public class BlackJack extends PointGame{
                 ppl.addCard(deck.pop());
                 ppl.addCard(deck.pop());
             }
-        }
-    }
-
-    // For the "split" case
-    public void MergePlayers() {
-        PokerPlayer principalPlayer;
-
-        if (players.get(0).isDealer()) {
-            principalPlayer = players.get(1);
-        }
-        else {
-            principalPlayer = players.get(0);
-        }
-
-        for (int idx = 2; idx < players.size(); idx++) {
-            PokerPlayer playerTmp = players.get(idx);
-            System.out.println(playerTmp.getBalance());
-            principalPlayer.setBalance(principalPlayer.getBalance() + playerTmp.getBalance());
         }
     }
 }
