@@ -58,6 +58,7 @@ public class BlackJack extends PointGame{
             // note: if all non-dealers bust, then this round immediately ends.
             boolean allBust = true;
             for (int idx = 0; idx < players.size(); idx++) {
+                // Blackjack special: All non-dealers sync balance.
                 PokerPlayer playerTmp = players.get(idx);
                 if (playerTmp.isDealer()) {
                     continue;
@@ -71,7 +72,7 @@ public class BlackJack extends PointGame{
                 // Demonstrate the board
                 printBoard();
                 // Perform the actions
-                PlayerAction(playerTmp, false, false);  // note: moved "playerSetBet(player)" and "optimalPoint(player, false)" into PlayerAction - case "stand"
+                PlayerAction(playerTmp, false, false);  // note: moved "optimalPoint(player, false)" into PlayerAction - case "stand"
 
                 // If anyone doesn't bust, then allBust is false
                 if (!isBust(playerTmp)) {
