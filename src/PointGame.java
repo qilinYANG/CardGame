@@ -53,8 +53,11 @@ public class PointGame extends Game {
 
                 case 3:  // double up
                     // If has enough balance, else: notify and break (not break out)
+
+
                     if(ppl.getBalance() < ppl.getBet()){
                         System.out.println("Your Balance is not Enough");
+
                         break;
                     }
                     ppl.addBet(ppl.getBet());
