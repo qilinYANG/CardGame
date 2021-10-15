@@ -29,11 +29,11 @@ public class PointGame extends Game {
         out:while(true){
             int index;
             if (allowSplit) {
-                System.out.println("Please select your action: 1. hit  2. stand 3. double up  4. split");
+                System.out.println("Please select your action:\n1. hit\n2. stand\n3. double up\n4. split");
                 index = Utils.safeIntInput("Please input your selection (1 to 4): ", 1, 4);
             }
             else {
-                System.out.println("Please select your action: 1. hit  2. stand 3. double up");
+                System.out.println("Please select your action:\n1. hit\n2. stand\n3. double up");
                 index = Utils.safeIntInput("Please input your selection (1 to 3): ", 1, 3);
             }
 
@@ -48,15 +48,21 @@ public class PointGame extends Game {
                     break;
 
                 case 2:  // stand
+                    optimalPoint(ppl,false);
                     break out;
 
                 case 3:  // double up
+                    // If has enough balance, else: notify and break (not break out)
                     ppl.addBet(ppl.getBet());
                     ppl.addCard(deck.pop());
                     optimalPoint(ppl, aceRestricted);
                     break out;  // end, whether bust or not
-
+                
                 case 4: 
+                    // If has enough balance
+                    // If has exactly two cards
+                    // If the cards are of the same rank
+                    // otherwise: notify and break (not break out)
                     throw new UnsupportedOperationException("Not implemented yet!");  // debug: Please implement this part.
             }
         }
@@ -112,6 +118,7 @@ public class PointGame extends Game {
         // If bust
         if (sum > points) {
             ppl.setScore(-1);
+            System.out.println("\n" + ppl.getName() + ": Bust! :(\n");
             return;
         }
 
@@ -136,6 +143,7 @@ public class PointGame extends Game {
 
         if (condition_1 && condition_2 && condition_3) {
             sum += 0.5;
+            System.out.println("\n" + ppl.getName() + ": Natural! :)\n");
         }
 
         ppl.setScore(sum);
@@ -145,12 +153,12 @@ public class PointGame extends Game {
      * Print list of cards and points at hand for each player
      */
     public void printBoard() {
-        System.out.println("Dealer: " + dealer.getName() + "   Balance: " + dealer.getBalance());
+        System.out.println("Dealer: " + dealer.getName() + "   Balance: $" + dealer.getBalance());
         System.out.println(dealer.print_hand() + "\n");
 
         for(PokerPlayer ppl: players){
             if (!ppl.isDealer()) {
-                System.out.println("Player: " + ppl.getName() + "   Balance: "+ppl.getBalance()+"   Bet: "+ppl.getBet());
+                System.out.println("Player: " + ppl.getName() + "   Balance: $"+ppl.getBalance()+"   Bet: $"+ppl.getBet());
                 System.out.println(ppl.print_hand() + "\n");
             }
         }
@@ -198,25 +206,57 @@ public class PointGame extends Game {
      * @param dealer
      * @param winner
      */
-    public void updateBalance(PokerPlayer player, PokerPlayer dealer, String winner){
+    public void updateBalance(PokerPlayer player, PokerPlayer dealer, String winner) {
         // If player wins
         if (winner.equals("Player")) {
+            // Player wins money
             player.setBalance(player.getBalance() + 2 * player.getBet());
+            // Player clears bet
+            player.clearBet();
+            // Dealer loses money
             dealer.setBalance(dealer.getBalance() - player.getBet());
-            System.out.println("Winner is Player!");
+            System.out.println(player.getName() + "trumps the Dealer!");
         }
 
         // If dealer wins
         if (winner.equals("Dealer")) {
+            // Player clears bet
+            player.clearBet();
+            // Dealer wins money
             dealer.setBalance(dealer.getBalance() + player.getBet());
-            System.out.println("Winner is Dealer!");
+            System.out.println("The Dealer trumps" + player.getName() + "!");
         }
 
         // If no one wins
         if(winner.equals("Draw")){
+            // Player gets back the money
             player.setBalance(player.getBalance() + player.getBet());
-            System.out.println("Draw!");
+            // Player clears bet
+            player.clearBet();
+            System.out.println(player.getName() + " VS the Dealer:  Draw!");
         }
+    }
+
+    public void nonDealerInitBalance(double value) {
+        for (int idx = 0; idx < players.size(); idx++) {
+            PokerPlayer player_tmp = players.get(idx);
+            if (!player_tmp.isDealer()) {
+                player_tmp.setBalance(value);
+            }
+        }
+    }
+
+    public void playersClearHands() {
+        for (int idx = 0; idx < players.size(); idx++) {
+            players.get(idx).clearHand();
+        }
+    }
+
+    public void playerSetBet(PokerPlayer player) {
+        System.out.println("Player: " + player.getName() + " Please place your bet.");
+        // note: minimum bet: $10; maximum bet: the player's balance
+        player.addBet(Utils.safeDoubleInput("Please input the amount (minimum bet is $10): ", 10, player.getBalance()));
+        System.out.println("Success.\n");
     }
 }
 
