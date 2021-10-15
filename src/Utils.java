@@ -23,4 +23,24 @@ public class Utils {
         }
         return int_tmp;
     }
+
+    // Foolproof double input
+    public static double safeDoubleInput(String message, double min, double max) {
+        double double_tmp;
+
+        while (true) {
+            System.out.println(message);
+            String str_tmp = scan.next();
+            try {
+                double_tmp = Double.parseDouble(str_tmp);
+                if ((double_tmp >= min) && (double_tmp <= max)) {
+                    break;
+                }
+                System.out.println("Not within range [" + min + ", " + max + "]!");
+              } catch(NumberFormatException e) {
+                System.out.println("Not a number!");
+            } 
+        }
+        return double_tmp;
+    }
 }

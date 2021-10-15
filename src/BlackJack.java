@@ -1,104 +1,172 @@
 import java.util.Random;
 
-// Working on here
+// The game of BlackJack
 public class BlackJack extends PointGame{
-    private PokerPlayer player;
+    // Preparations before starting
     public BlackJack(){
+        // Configure the superclass
         super(21);
-        int num=0;
-        System.out.println("Welcome to BlackJack! Please choose: 1.Player VS Computer  2.Player VS Player ");
-        while(true){
-            System.out.println("Please select 1 or 2: ");
-            String tmp =scan.next();
-            if (tmp.equals("1") || tmp.equals("2")){
-                num=Integer.parseInt(tmp);
+
+        // Greetings
+        System.out.println("Welcome to BlackJack!\n\nPlease choose:\n1. Player VS Computer\n2. Player VS Player\n");
+
+        // Register players
+        registerPlayers(Utils.safeIntInput("Please select 1 or 2: ", 1, 2));
+
+        // note: 1) determine the dealer; 2) the non-dealers determine the balance; 3) the dealer adjusts his/her balance accordingly
+
+        // Determine and configure the dealer
+        if (players.size() == 1) {
+            // If one player
+            dealer = new PokerPlayer("Computer");
+            System.out.println("The Computer will be the dealer!");
+            players.add(dealer);
+        }
+        else {
+            // If two players
+            dealer = players.get(new Random().nextInt(2));
+            System.out.println(dealer.name + " will be the dealer!\n");
+
+        }
+        dealer.setDealer();
+
+        // Configure the non-dealers
+        double bet_tmp = Utils.safeDoubleInput("Please input the balance for the players (the non-dealers) ($10 ~ $100000): ", 10, 100000);
+        nonDealerInitBalance(bet_tmp);
+        System.out.println("Success.\n");
+
+        // "the dealer adjusts his/her balance accordingly"
+        dealer.setBalance(bet_tmp * 100);
+
+        
+    }
+
+    // Start the game
+    public void startGame() {
+        while (true) {
+            // Init and shuffle the deck
+            deck.reset();
+            deck.shuffle();
+
+            // Deal cards
+            dealCards();
+
+            // Demonstrate the board
+            printBoard();
+            
+            // ----- //
+            // Non-dealers' actions
+            // ----- //
+            // note: if all non-dealers bust, then this round immediately ends.
+            boolean allBust = true;
+            for (int idx = 0; idx < players.size(); idx++) {
+                PokerPlayer playerTmp = players.get(idx);
+                if (playerTmp.isDealer()) {
+                    continue;
+                }
+                // If the player has enough money
+                // [...]
+
+                // The Player sets bet
+                playerSetBet(playerTmp);
+                // Demonstrate the board
+                printBoard();
+                // Perform the actions
+                PlayerAction(playerTmp, false, false);  // note: moved "playerSetBet(player)" and "optimalPoint(player, false)" into PlayerAction - case "stand"
+
+                // If anyone doesn't bust, then allBust is false
+                if (!isBust(playerTmp)) {
+                    allBust = false;
+                }
+            }
+            
+            // If everyone busts, then the dealer trumps everyone
+            if (allBust) {
+                for (int idx = 0; idx < players.size(); idx++) {
+                    PokerPlayer playerTmp = players.get(idx);
+                    if (playerTmp.isDealer()) {
+                        continue;
+                    }
+                    updateBalance(playerTmp, dealer, "Dealer");
+                }
+            }
+            else {
+                // ----- //
+                // Dealer's actions
+                // ----- //
+                // Demonstrate dealer's hand
+                for (PokerCard card : dealer.getHand()) {
+                    card.setVisible();
+                }
+                dealerHit(dealer, false);
+                // Demonstrate the board
+                printBoard();
+                
+                // ----- //
+                // Conclude the game
+                // ----- //
+                for (int idx = 0; idx < players.size(); idx++) {
+                    PokerPlayer playerTmp = players.get(idx);
+                    if (playerTmp.isDealer()) {
+                        continue;
+                    }                   
+                    updateBalance(playerTmp, dealer, compare(playerTmp, dealer, false));
+                }
+            }
+
+            // merge players if needed
+
+            printBoard();
+            playersClearHands();  // Everyone clears their hand
+
+            // If "non-sufficient funds (NSF)" for every player, then the game has to end.
+            boolean allNSF = true;
+            for (int idx = 0; idx < players.size(); idx++) {
+                PokerPlayer playerTmp = players.get(idx);
+                if (playerTmp.isDealer()) {
+                    continue;
+                }
+                if (playerTmp.getBalance() > 10) {
+                    allNSF = false;
+                    break;
+                }
+            }
+
+            if (allNSF) {
+                Utils.safeIntInput("Sorry, but you have to leave :( (non-sufficient funds; $10)\n0: Acknowledged!\n1: Bye!", 0, 1);
+                System.out.println("Goodbye!");
                 break;
             }
-            System.out.println("Invalid Number!");
-        }
-        registerPlayers(num);
-        set_dealer();
-    }
-    public void set_dealer(){
-        int size=players.size();
-        if(size==1){
-            PokerPlayer computer=new PokerPlayer("Computer");
-            computer.setDealer();
-            computer.setBalance(99999);
-            dealer=computer;
-            players.add(computer);
-            player=players.get(0);
-            player.setBalance(1000);
-        }else if(size==2){
-            Random random=new Random();
-            int index=random.nextInt(2);
-            players.get(index).setDealer();
-            dealer=players.get(index);// 0 or 1
-            player=players.get(1-index);// 1 or 0
-            dealer.setBalance(99999);
-            player.setBalance(1000);
-        }
-    }
 
-    public void start_game(){
-
-        while(true){
-            deck.shuffle();
-            distribute_cards();
-            optimalPoint(player,false);
-            printBoard();
-            setBet();
-            PlayerAction(player, false, false);
-            for(PokerCard card:dealer.getHand()){
-                card.setVisible();
+            if (Utils.safeIntInput("Do you want to continue?\n0: Yes!\n1: No.", 0, 1) == 1) {
+                System.out.println("Goodbye!");
+                break;
             }
-            if(player.getScore()==-1){
-                updateBalance(player,dealer,"Dealer");
-            }else {
-                dealerHit(dealer, false);
-                updateBalance(player, dealer, compare(player, dealer, false));
-            }
-            player.clearBet();
-            printBoard();
-
-            System.out.println("Do you want to continue?(y/n)");
-            if(!scan.nextLine().equals("y")){break;}
-            player.clearHand();
-            dealer.clearHand();
-            deck.reset();
-
         }
-
     }
-    public void distribute_cards(){
-        for(PokerPlayer man:players){
-            if(man.isDealer()){
-                man.addCard(deck.pop());
-                PokerCard tmp =deck.pop();
+
+    public void dealCards() {
+        for (PokerPlayer ppl : players) {
+            if (ppl.isDealer()) {
+                // If the player is a dealer
+                // Add a visible card
+                ppl.addCard(deck.pop());
+                // Add an invisible card
+                PokerCard tmp = deck.pop();
                 tmp.setInvisible();
-                man.addCard(tmp);
-            }else {
-                man.addCard(deck.pop());
-                man.addCard(deck.pop());
+                ppl.addCard(tmp);
+            }
+            else {
+                // If the player is not a dealer
+                // Add two cards
+                ppl.addCard(deck.pop());
+                ppl.addCard(deck.pop());
             }
         }
     }
-    public void setBet(){
 
-        System.out.println("Please input amount of currency you want to add to your bet (A number): ");
-        String bet=scan.next();
-        player.addBet(Double.parseDouble(bet));
-
-        while (true){
-            System.out.println("Player "+player.getName()+"'s current bet is: "+player.getBet());
-            System.out.println("Do you want to continue adding or withdrawing bet?(y/n)");
-            if(scan.nextLine().equals("y")){
-                System.out.println("Please input amount of currency you want to add or withdraw to your bet (A Positive or Negative number): ");
-                player.addBet(Double.parseDouble(scan.nextLine()));
-            }
-            break;
-        }
-
+    // For the "split" case
+    public void MergePlayers() {
 
     }
 }

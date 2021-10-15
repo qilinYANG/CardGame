@@ -5,14 +5,11 @@ import java.util.ArrayList;
 public abstract class Game {
     protected Scanner scan = new Scanner(System.in);
 
-    protected int playerCount;
     protected ArrayList<PokerPlayer> players = new ArrayList<PokerPlayer>();
 
     final void registerPlayers(int num) {
         // Input player count
-        playerCount = num;
-
-        for (int idx = 0; idx < playerCount; idx++) {
+        for (int idx = 0; idx < num; idx++) {
             System.out.println("Register Player " + idx);
             System.out.println("Please input name for Player " + idx + ":");
             PokerPlayer player_tmp = new PokerPlayer(scan.next());
