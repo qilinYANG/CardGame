@@ -48,7 +48,7 @@ public class PointGame extends Game {
                     break;
 
                 case 2:  // stand
-                    optimalPoint(ppl,false);
+                    optimalPoint(ppl, aceRestricted);
                     break out;
 
                 case 3:  // double up
@@ -64,11 +64,11 @@ public class PointGame extends Game {
                 
                 case 4: 
                     // If has enough balance
-                    boolean condition_1 = ppl.getBalance() < ppl.getBet();
+                    boolean condition_1 = ppl.getBalance() >= ppl.getBet();
                     // If has exactly two cards
                     boolean condition_2 = ppl.getHand().size() == 2;
                     // If the cards are of the same rank
-                    boolean condition_3 = ppl.getHand().get(0) == ppl.getHand().get(1);
+                    boolean condition_3 = true; // ppl.getHand().get(0) == ppl.getHand().get(1);  // debug: for testing
                     // otherwise: notify and break (not break out)
                     if (!(condition_1 && condition_2 && condition_3)) {
                         System.out.print("You are not qualified to split!");
@@ -101,6 +101,7 @@ public class PointGame extends Game {
                     pplSplit.addCard(deck.pop());
 
                     // break, but not "break out"
+                    printBoard();
                     break;
             }
         }
@@ -175,6 +176,7 @@ public class PointGame extends Game {
 
         // Check bonus case
         // note: "A natural Trianta Ena is defined as a hand having a value of 31 (i.e. an Ace and two face cards)."
+        // note: more like "i.e. an Ace and two "ten cards""
         boolean condition_1 = sum == points;
         boolean condition_2 = aceNum == 1;  // Natural Blackjack or "i.e. an Ace and two face cards"
         boolean condition_3 = hand.size() == (int)((sum - 1) / 10);  // The other cards are all face cards. note: "i.e. an Ace and two face cards"
