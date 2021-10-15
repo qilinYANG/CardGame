@@ -4,6 +4,3 @@ public class Play {
         menu.run();    
     }
 }
-
-// TODO: Implement the "split".
-// TODO: (minor) beautify the command line interface
