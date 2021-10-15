@@ -45,12 +45,6 @@ public class BlackJack extends PointGame{
             // Init and shuffle the deck
             deck.reset();
             deck.shuffle();
-
-            // Deal cards
-            dealCards();
-
-            // Demonstrate the board
-            printBoard();
             
             // ----- //
             // Non-dealers' actions
@@ -65,6 +59,9 @@ public class BlackJack extends PointGame{
             }
             // The non-dealer places his/her bet
             playerSetBet(principalPlayer);
+
+            // Deal cards
+            dealCards();
 
             // note: if all non-dealers bust, then this round immediately ends.
             boolean allBust = true;
