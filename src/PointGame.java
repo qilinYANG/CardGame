@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class PointGame extends Game {
 
@@ -18,68 +17,94 @@ public class PointGame extends Game {
     }
     public void dummy(){}
     public boolean isBust(PokerPlayer ppl) {
-
         if (ppl.getScore() == -1) return true;
         return false;
     }
-
-
 
     /**
      * Action player take in each turn
      * @param ppl
      */
-    public void PlayerAction(PokerPlayer ppl,boolean tri) {
+    public void PlayerAction(PokerPlayer ppl, boolean allowSplit, boolean aceRestricted) {
         out:while(true){
-            System.out.println("Please select your action: 1. hit  2. split 3. double up  4. stand");
-            int index = Utils.safeIntInput("Please input your selection (1 to 4): ", 1, 4);
-            switch (index){
-                case 1:
-                    ppl.addCard(deck.pop());
-                    optimalPoint(ppl,tri);
-                    if(isBust(ppl)){break out;}
-                    break;
-                case 2: break;
-                case 3:
-                    ppl.setBet(2*ppl.getBet());
-                    ppl.addCard(deck.pop());
-                    optimalPoint(ppl,tri);
-                    if(isBust(ppl)){break out;}
-                    break;
-                case 4: break out;
+            int index;
+            if (allowSplit) {
+                System.out.println("Please select your action: 1. hit  2. stand 3. double up  4. split");
+                index = Utils.safeIntInput("Please input your selection (1 to 4): ", 1, 4);
+            }
+            else {
+                System.out.println("Please select your action: 1. hit  2. stand 3. double up");
+                index = Utils.safeIntInput("Please input your selection (1 to 3): ", 1, 3);
             }
 
+            switch (index){
+                case 1:  // hit
+                    ppl.addCard(deck.pop());
+                    optimalPoint(ppl, aceRestricted);
+                    if (isBust(ppl)) {
+                        break out;
+                    }
+                    printBoard();
+                    break;
+
+                case 2:  // stand
+                    break out;
+
+                case 3:  // double up
+                    ppl.addBet(ppl.getBet());
+                    ppl.addCard(deck.pop());
+                    optimalPoint(ppl, aceRestricted);
+                    break out;  // end, whether bust or not
+
+                case 4: 
+                    throw new UnsupportedOperationException("Not implemented yet!");  // debug: Please implement this part.
+            }
         }
-
     }
-
-
-
 
     /**
      * Calculate optimal total hand point
-     * @param ppl
-     * @return -1(bust) sum(point not BlackJack), 22 or 32 (BlackJack)
+     * @param ppl, aceRestricted
+     * @return -1 (bust), sum, or 21.5 or 31.5 (Bonus case)
      * updated by Junyi at Oct 12.
      */
+    public void optimalPoint(PokerPlayer ppl, boolean aceRestricted) {
+        int sum = 0; 
+        int aceNum = 0;
 
-    public void optimalPoint(PokerPlayer ppl,boolean tri) {
-        int sum = 0, AceNum = 0, sumWthAc = 0;
-        boolean hasAce = false;
+        // Get hand
         ArrayList<PokerCard> hand = ppl.getHand();
-
+        
+        // Get basic sum
         for (PokerCard pc : hand) {
             String value = pc.getValue();
             if (value.equals("1")) {
-                hasAce = true;
-                AceNum += 1;
+                // Update Ace number
+                aceNum += 1;
+
+                // If Ace is not restricted
+                if (!aceRestricted) {
+                    sum += 1;
+                    continue;
+                }
+
+                // If Ace is restricted (Then at most one Ace can be 1)
+                if (aceNum == 1) {
+                    sum += 1;
+                }
+                else {
+                    sum += 11;
+                }    
             }
 
             if (value.equals("jack") ||
-                    value.equals("queen") ||
-                    value.equals("king")) {
+                value.equals("queen") ||
+                value.equals("king")) {
+                // If it is a face card
                 sum += 10;
-            } else {
+            }
+            else {
+                // If it is neither an Ace nor a face card
                 sum += Double.parseDouble(value);
             }
         }
@@ -90,41 +115,45 @@ public class PointGame extends Game {
             return;
         }
 
-        if (tri) {
-            sum += 10 * (AceNum - 1);
-            if (sum > points) {
-                ppl.setScore(-1);
-                return;
-            } else {
-                sum += 10;
+        // Get optimal sum
+        for (int idx = 0; idx < aceNum; idx++) {
+            // If Ace is restricted (Then at most one Ace is free to change)
+            if ((aceRestricted) && (idx == 1)) {
+                break;
             }
-        } else {
-            sumWthAc = sum;
-            int sumtmp = 0;
-            for (int i = 0; i < AceNum; i++) {
-                sumtmp = sumWthAc;
-                sumWthAc += 10;
-                if (sumWthAc > points) break;
+            // If the sum is optimal
+            if (sum + 10 > points) {
+                break;
             }
-            ppl.setScore(sumtmp);
-            return;
+            sum += 10;
         }
+
+        // Check bonus case
+        // note: "A natural Trianta Ena is defined as a hand having a value of 31 (i.e. an Ace and two face cards)."
+        boolean condition_1 = sum == points;
+        boolean condition_2 = aceNum == 1;  // Natural Blackjack or "i.e. an Ace and two face cards"
+        boolean condition_3 = hand.size() == (int)((sum - 1) / 10);  // The other cards are all face cards. note: "i.e. an Ace and two face cards"
+
+        if (condition_1 && condition_2 && condition_3) {
+            sum += 0.5;
+        }
+
+        ppl.setScore(sum);
     }
 
     /**
      * Print list of cards and points at hand for each player
      */
-
     public void printBoard() {
-        System.out.println("Dealer: "+dealer.getName()+"   Balance: "+dealer.getBalance());
-        System.out.println(dealer.print_hand()+"\n");
+        System.out.println("Dealer: " + dealer.getName() + "   Balance: " + dealer.getBalance());
+        System.out.println(dealer.print_hand() + "\n");
 
         for(PokerPlayer ppl: players){
-            System.out.println("Player "+ppl.getName()+"   Balance: "+ppl.getBalance());
-            System.out.println(ppl.print_hand());
-            System.out.println();
+            if (!ppl.isDealer()) {
+                System.out.println("Player: " + ppl.getName() + "   Balance: "+ppl.getBalance()+"   Bet: "+ppl.getBet());
+                System.out.println(ppl.print_hand() + "\n");
+            }
         }
-
     }
 
     /**
@@ -132,13 +161,13 @@ public class PointGame extends Game {
      * @param dealer
      * @return
      */
-    public double dealerHit(PokerPlayer dealer,boolean tri) {
-        optimalPoint(dealer,tri);
-        int threshold = points-4;
+    public double dealerHit(PokerPlayer dealer, boolean aceRestricted) {
+        optimalPoint(dealer, aceRestricted);
+        int threshold = points - 4;  // 17 for 21; 27 for 31
         double curPoint = dealer.getScore();
         while(curPoint < threshold && curPoint != -1){
             dealer.addCard(deck.pop());
-            optimalPoint(dealer,tri);
+            optimalPoint(dealer, aceRestricted);
             curPoint = dealer.getScore();
         }
         return curPoint;
@@ -168,20 +197,27 @@ public class PointGame extends Game {
      * update Balance account
      * @param player
      * @param dealer
+     * @param winner
      */
     public void updateBalance(PokerPlayer player, PokerPlayer dealer, String winner){
-
+        // If player wins
         if (winner.equals("Player")) {
             player.setBalance(player.getBalance() + 2 * player.getBet());
-            dealer.setBalance(dealer.getBalance() - 2 * player.getBet());
+            dealer.setBalance(dealer.getBalance() - player.getBet());
+            System.out.println("Winner is Player!");
         }
 
+        // If dealer wins
         if (winner.equals("Dealer")) {
-            player.setBalance(player.getBalance() - player.getBet());
             dealer.setBalance(dealer.getBalance() + player.getBet());
+            System.out.println("Winner is Dealer!");
         }
 
+        // If no one wins
+        if(winner.equals("Draw")){
+            player.setBalance(player.getBalance() + player.getBet());
+            System.out.println("Draw!");
+        }
     }
-
 }
 

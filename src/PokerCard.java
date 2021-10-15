@@ -11,9 +11,9 @@ public class PokerCard extends Card{
 
     private void setSuit(String suit) {
         if (suit.equals("club") ||
-                suit.equals("diamond") ||
-                suit.equals("heart") ||
-                suit.equals("spade")) {
+            suit.equals("diamond") ||
+            suit.equals("heart") ||
+            suit.equals("spade")) {
             this.suit = suit;
             return;
         }
@@ -22,11 +22,12 @@ public class PokerCard extends Card{
 
     private void setValue(String value) {
         if (value.equals("jack") ||
-                value.equals("queen") ||
-                value.equals("king")){
+            value.equals("queen") ||
+            value.equals("king")){
             this.value = value;
             return;
         }
+
         try {
             int tmp = Integer.parseInt(value);
             if ((1 <= tmp) && (tmp <= 10)) {
