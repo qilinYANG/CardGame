@@ -211,20 +211,20 @@ public class PointGame extends Game {
         if (winner.equals("Player")) {
             // Player wins money
             player.setBalance(player.getBalance() + 2 * player.getBet());
-            // Player clears bet
-            player.clearBet();
             // Dealer loses money
             dealer.setBalance(dealer.getBalance() - player.getBet());
+            // Player clears bet
+            player.clearBet();
             System.out.println(player.getName() + "trumps the Dealer!");
         }
 
         // If dealer wins
         if (winner.equals("Dealer")) {
-            // Player clears bet
-            player.clearBet();
             // Dealer wins money
             dealer.setBalance(dealer.getBalance() + player.getBet());
-            System.out.println("The Dealer trumps" + player.getName() + "!");
+            // Player clears bet
+            player.clearBet();
+            System.out.println("The Dealer trumps " + player.getName() + "!");
         }
 
         // If no one wins
