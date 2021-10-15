@@ -21,13 +21,11 @@ public class PointGame extends Game {
         return false;
     }
 
-
-
     /**
      * Action player take in each turn
      * @param ppl
      */
-    public void PlayerAction(PokerPlayer ppl, boolean allowSplit, boolean aceFreedomRule) {
+    public void PlayerAction(PokerPlayer ppl, boolean allowSplit, boolean aceRestricted) {
         out:while(true){
             int index;
             if (allowSplit) {
@@ -42,7 +40,7 @@ public class PointGame extends Game {
             switch (index){
                 case 1:  // hit
                     ppl.addCard(deck.pop());
-                    optimalPoint(ppl, aceFreedomRule);
+                    optimalPoint(ppl, aceRestricted);
                     if (isBust(ppl)) {
                         break out;
                     }
@@ -55,7 +53,7 @@ public class PointGame extends Game {
                 case 3:  // double up
                     ppl.addBet(ppl.getBet());
                     ppl.addCard(deck.pop());
-                    optimalPoint(ppl, aceFreedomRule);
+                    optimalPoint(ppl, aceRestricted);
                     break out;  // end, whether bust or not
 
                 case 4: 
@@ -64,17 +62,13 @@ public class PointGame extends Game {
         }
     }
 
-
-
-
     /**
      * Calculate optimal total hand point
-     * @param ppl, aceFreedomRule (aceFreedomRule: True: Ace has freedom; False: Ace has restrictions)
+     * @param ppl, aceRestricted
      * @return -1 (bust), sum, or 21.5 or 31.5 (Bonus case)
      * updated by Junyi at Oct 12.
      */
-
-    public void optimalPoint(PokerPlayer ppl, boolean aceFreedomRule) {
+    public void optimalPoint(PokerPlayer ppl, boolean aceRestricted) {
         int sum = 0; 
         int aceNum = 0;
 
@@ -88,13 +82,13 @@ public class PointGame extends Game {
                 // Update Ace number
                 aceNum += 1;
 
-                // If Ace has freedom
-                if (aceFreedomRule) {
+                // If Ace is not restricted
+                if (!aceRestricted) {
                     sum += 1;
                     continue;
                 }
 
-                // If Ace has restrictions (Then at most one Ace can be 1)
+                // If Ace is restricted (Then at most one Ace can be 1)
                 if (aceNum == 1) {
                     sum += 1;
                 }
@@ -123,11 +117,11 @@ public class PointGame extends Game {
 
         // Get optimal sum
         for (int idx = 0; idx < aceNum; idx++) {
-            // If Ace has restrictions (Then at most one Ace is free to change)
-            if ((!aceFreedomRule) && (idx == 1)) {
+            // If Ace is restricted (Then at most one Ace is free to change)
+            if ((aceRestricted) && (idx == 1)) {
                 break;
             }
-            // If is optimal
+            // If the sum is optimal
             if (sum + 10 > points) {
                 break;
             }
@@ -150,19 +144,16 @@ public class PointGame extends Game {
     /**
      * Print list of cards and points at hand for each player
      */
-
     public void printBoard() {
-        System.out.println("Dealer: "+dealer.getName()+"   Balance: "+dealer.getBalance());
-        System.out.println(dealer.print_hand()+"\n");
+        System.out.println("Dealer: " + dealer.getName() + "   Balance: " + dealer.getBalance());
+        System.out.println(dealer.print_hand() + "\n");
 
         for(PokerPlayer ppl: players){
-            if(!ppl.isDealer()){
-                System.out.println("Player "+ppl.getName()+"   Balance: "+ppl.getBalance()+"   Bet: "+ppl.getBet());
-                System.out.println(ppl.print_hand());
-                System.out.println();
+            if (!ppl.isDealer()) {
+                System.out.println("Player: " + ppl.getName() + "   Balance: "+ppl.getBalance()+"   Bet: "+ppl.getBet());
+                System.out.println(ppl.print_hand() + "\n");
             }
         }
-
     }
 
     /**
@@ -170,13 +161,13 @@ public class PointGame extends Game {
      * @param dealer
      * @return
      */
-    public double dealerHit(PokerPlayer dealer,boolean tri) {
-        optimalPoint(dealer,tri);
-        int threshold = points-4;
+    public double dealerHit(PokerPlayer dealer, boolean aceRestricted) {
+        optimalPoint(dealer, aceRestricted);
+        int threshold = points - 4;  // 17 for 21; 27 for 31
         double curPoint = dealer.getScore();
         while(curPoint < threshold && curPoint != -1){
             dealer.addCard(deck.pop());
-            optimalPoint(dealer,tri);
+            optimalPoint(dealer, aceRestricted);
             curPoint = dealer.getScore();
         }
         return curPoint;
@@ -206,26 +197,27 @@ public class PointGame extends Game {
      * update Balance account
      * @param player
      * @param dealer
+     * @param winner
      */
     public void updateBalance(PokerPlayer player, PokerPlayer dealer, String winner){
-
+        // If player wins
         if (winner.equals("Player")) {
             player.setBalance(player.getBalance() + 2 * player.getBet());
             dealer.setBalance(dealer.getBalance() - player.getBet());
             System.out.println("Winner is Player!");
         }
 
+        // If dealer wins
         if (winner.equals("Dealer")) {
             dealer.setBalance(dealer.getBalance() + player.getBet());
             System.out.println("Winner is Dealer!");
         }
 
+        // If no one wins
         if(winner.equals("Draw")){
-            player.setBalance(player.getBalance()+player.getBet());
+            player.setBalance(player.getBalance() + player.getBet());
             System.out.println("Draw!");
         }
-
     }
-
 }
 
