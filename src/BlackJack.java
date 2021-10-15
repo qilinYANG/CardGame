@@ -15,7 +15,7 @@ public class BlackJack extends PointGame{
 
         // note: 1) determine the dealer; 2) the non-dealers determine the balance; 3) the dealer adjusts his/her balance accordingly
 
-        // Determine and configure the dealer
+        // Determine the dealer
         if (players.size() == 1) {
             // If one player
             dealer = new PokerPlayer("Computer");
@@ -37,8 +37,6 @@ public class BlackJack extends PointGame{
 
         // "the dealer adjusts his/her balance accordingly"
         dealer.setBalance(bet_tmp * 100);
-
-        
     }
 
     // Start the game
@@ -69,6 +67,7 @@ public class BlackJack extends PointGame{
 
                 // The Player sets bet
                 playerSetBet(playerTmp);
+                
                 // Demonstrate the board
                 printBoard();
                 // Perform the actions
@@ -167,6 +166,11 @@ public class BlackJack extends PointGame{
 
     // For the "split" case
     public void MergePlayers() {
+
+    }
+
+    // For the "split" case
+    public void PlayersSyncBalance() {
 
     }
 }
