@@ -51,10 +51,12 @@ public class Trianta extends PointGame{
             player_setBet();
             boolean allbust=true;
             for(PokerPlayer ppl:players){
+                ppl.getHand().get(0).setVisible();
                 PlayerAction(ppl,false,true);
                 if(!isBust(ppl)){
                     allbust=false;
                 }
+                ppl.getHand().get(0).setInvisible();
             }
             if(allbust){
                 for(PokerPlayer ppl:players){
