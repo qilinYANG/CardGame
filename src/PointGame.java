@@ -30,6 +30,8 @@ public class PointGame extends Game {
                 index = Utils.safeIntInput("Please input your selection (1 to 3): ", 1, 3);
             }
 
+            Utils.beautifulWait(1);
+
             switch (index){
                 case 1:  // hit
                     ppl.addCard(deck.pop());
@@ -38,6 +40,7 @@ public class PointGame extends Game {
                         break out;
                     }
                     printBoard();
+                    Utils.beautifulWait(1);
                     break;
 
                 case 2:  // stand
@@ -64,7 +67,8 @@ public class PointGame extends Game {
                     boolean condition_3 = ppl.getHand().get(0) == ppl.getHand().get(1);
                     // otherwise: notify and break (not break out)
                     if (!(condition_1 && condition_2 && condition_3)) {
-                        System.out.print("You are not qualified to split!");
+                        System.out.println("You are not qualified to split!");
+                        Utils.beautifulWait(1);
                         break;
                     }
                     // Start Split
@@ -95,6 +99,7 @@ public class PointGame extends Game {
 
                     // break, but not "break out"
                     printBoard();
+                    Utils.beautifulWait(1);
                     break;
             }
         }
@@ -218,6 +223,7 @@ public class PointGame extends Game {
 
     // update Balance account
     public void updateBalance(PokerPlayer player, PokerPlayer dealer, String winner) {
+        Utils.beautifulWait(0.3);
         // If player wins
         if (winner.equals("Player")) {
             // Player wins money
@@ -246,6 +252,7 @@ public class PointGame extends Game {
             player.clearBet();
             System.out.println(player.getName() + " VS the Dealer:  Draw!");
         }
+        Utils.beautifulWait(0.3);
     }
 
     public void nonDealerInitBalance(double value) {

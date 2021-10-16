@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
-// Working on here
+// The class of Playing Trianta game, which extends Class PointGame. Class Trianta also contains unique game process and game rules.  For example, the method rotate_dealer() is unique and just for Trianta rules.
 public class Trianta extends PointGame{
 
     ArrayList<PokerPlayer> activeplayers=new ArrayList<>(players);

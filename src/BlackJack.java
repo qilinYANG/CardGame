@@ -1,6 +1,6 @@
 import java.util.Random;
 
-// The game of BlackJack
+// The class of Playing BlackJack game, which extends Class PointGame. Class BlackJack contains special game process and game rules just for BlackJack. For example, the method distribute_card() is unique and just for BlackJack rules.
 public class BlackJack extends PointGame{
     // Preparations before starting
     public BlackJack(){
@@ -13,6 +13,7 @@ public class BlackJack extends PointGame{
 
         // Register players
         registerPlayers(Utils.safeIntInput("Please select 1 or 2: ", 1, 2));
+        Utils.beautifulWait(1);
 
         // note: 1) determine the dealer; 2) the non-dealers determine the balance; 3) the dealer adjusts his/her balance accordingly
 
@@ -21,12 +22,14 @@ public class BlackJack extends PointGame{
             // If one player
             dealer = new PokerPlayer("Computer");
             System.out.println("The Computer will be the dealer!");
+            Utils.beautifulWait(1);
             players.add(dealer);
         }
         else {
             // If two players
             dealer = players.get(new Random().nextInt(2));
             System.out.println(dealer.name + " will be the dealer!\n");
+            Utils.beautifulWait(1);
 
         }
         dealer.setDealer();
@@ -34,6 +37,7 @@ public class BlackJack extends PointGame{
         // Configure the non-dealers
         double bet_tmp = Utils.safeDoubleInput("Please input the balance for the players (the non-dealers) ($10 ~ $100000): ", 10, 100000);
         nonDealerInitBalance(bet_tmp);
+        Utils.beautifulWait(1);
         System.out.println("Success.\n");
 
         // "the dealer adjusts his/her balance accordingly"
@@ -44,6 +48,9 @@ public class BlackJack extends PointGame{
     public void startGame() {
         while (true) {
             // Init and shuffle the deck
+            Utils.beautifulWait(1);
+            System.out.println("Shuffling the deck.");
+            Utils.beautifulWait(1);
             deck.reset();
             deck.shuffle();
             
@@ -60,9 +67,12 @@ public class BlackJack extends PointGame{
             }
             // The non-dealer places his/her bet
             playerSetBet(principalPlayer);
+            Utils.beautifulWait(1);
 
             // Deal cards
             dealCards();
+            System.out.println("Dealing cards.");
+            Utils.beautifulWait(1);
 
             // note: if all non-dealers bust, then this round immediately ends.
             boolean allBust = true;
@@ -85,6 +95,7 @@ public class BlackJack extends PointGame{
                 
                 // Demonstrate the board
                 printBoard();
+                Utils.beautifulWait(1);
                 // Perform the actions
                 PlayerAction(playerTmp, true, false);  // note: moved "optimalPoint(player, false)" into PlayerAction - case "stand"
                 
