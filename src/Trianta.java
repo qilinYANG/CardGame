@@ -4,6 +4,7 @@ import java.util.Random;
 
 // The class of Playing Trianta game, which extends Class PointGame. Class Trianta also contains unique game process and game rules.  For example, the method rotate_dealer() is unique and just for Trianta rules.
 public class Trianta extends PointGame{
+    private ArrayList<PokerPlayer> give_up_player=new ArrayList<>();
 
     //Comparator used to Sort players by current balance
     class Sortbybalance implements Comparator<PokerPlayer>{
@@ -125,6 +126,12 @@ public class Trianta extends PointGame{
             printBoard();
             Utils.beautifulWait(1);
 
+            //recover players
+            for(PokerPlayer ppl:give_up_player){
+                players.add(ppl);
+            }
+            give_up_player.clear();
+
             // Everyone clears their hand
             playersClearHands();
 
@@ -133,6 +140,8 @@ public class Trianta extends PointGame{
 
             //if player don't have enough balance, he or she won't be able to continue playing.
             remove_loser();
+
+
 
             //if there is only one player, game has to end
             if(players.size()<2){
@@ -177,11 +186,20 @@ public class Trianta extends PointGame{
                 System.out.println("------------------------------------");
                 System.out.println("Player "+ppl.getName()+"   balance: "+ppl.getBalance()+"  bet: "+ppl.getBet());
                 System.out.println("Card: "+ppl.getHand());
-                Double bet_tmp= Utils.safeDoubleInput("Please input the amount of bet you want to add: ",10,ppl.getBalance());
-                ppl.addBet(bet_tmp);
-                System.out.println("Success!");
+                System.out.println("Do you want to set Bet? If not you will give up in this round. (y/n)");
+                if(scan.next().equals("n")){
+                    give_up_player.add(ppl);
+                    System.out.println(ppl.getName()+" give up in this round!");
+                }else{
+                    Double bet_tmp= Utils.safeDoubleInput("Please input the amount of bet you want to add: ",10,ppl.getBalance());
+                    ppl.addBet(bet_tmp);
+                    System.out.println("Success!");
+                }
                 Utils.beautifulWait(1);
             }
+        }
+        for(PokerPlayer ppl: give_up_player){
+            players.remove(ppl);
         }
     }
 
@@ -206,10 +224,12 @@ public class Trianta extends PointGame{
 
     //remove players who don't have enough balance
     public void remove_loser(){
-        for(PokerPlayer ppl: players){
+        ArrayList<PokerPlayer>players_tmp=new ArrayList<>(players);
+        for(PokerPlayer ppl: players_tmp){
             if(ppl.getBalance()<10){
                 System.out.println("Player "+ppl.getName()+"'s balance is less than 10$!!! So he cannot continue playing!");
                 players.remove(ppl);
+                Utils.beautifulWait(1);
             }
         }
     }
