@@ -1,6 +1,6 @@
-Name: 
-Email: 
-BU ID: 
+Name: Qilin Yang
+Email: yangql15@bu.edu
+BU ID: U73204239
 
 Compilation and execution instruction:
 	1. javac .\Play.java
