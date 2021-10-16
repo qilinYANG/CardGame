@@ -23,7 +23,7 @@ Description of each class:
 		A class that provides utility functions.
 
 	BlackJack:
-		The class of Playing BlackJack game, which extends Class PointGame. Class BlackJack contains special game process and game rules just for BlackJack. For example, the method distribute_card() is unique and just for BlackJack rules.
+		The class of Playing BlackJack game, which extends Class PointGame. Class BlackJack contains special game process and game rules just for BlackJack. For example, the method dealerCards() is unique and just for BlackJack rules.
 
 	Trianta:
 		The class of Playing Trianta game, which extends Class PointGame. Class Trianta also contains unique game process and game rules.  For example, the method rotate_dealer() is unique and just for Trianta rules.
