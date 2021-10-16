@@ -7,8 +7,6 @@ Compilation and execution instruction:
 	2. java Play
 
 Description of each class:
-	BlackJack:
-	
 	Card:
 		A class that abstracts a physical card. Can be set visible or invisible.
 
@@ -21,14 +19,21 @@ Description of each class:
 	Game:
 		The abstraction for a general game. It implements the common functionalities shared among games. For example registering 
 
+	Utils:
+		A class that provides utility functions.
 
-	Utils: A class that provides utility functions.
+	BlackJack:
+		The class of Playing BlackJack game, which extends Class PointGame. Class BlackJack contains special game process and game rules just for BlackJack. For example, the method distribute_card() is unique and just for BlackJack rules.
+
+	Trianta:
+		The class of Playing Trianta game, which extends Class PointGame. Class Trianta also contains unique game process and game rules.  For example, the method rotate_dealer() is unique and just for Trianta rules.
+
 
     PointGame: Super class define common methods used by BlackJack and Trianta
 
 Any additional works or missed functionalities?
 	1. + Foolproof (User will get notified when inputted a wrong value, and it won't break the program.)
-	2. + Improved the procedure for determining the winner.
-	3. + Multiple user support, and users can use custom tokens.
-	4. + Created a utility class to manage utility functions.
+	2. + Utils class provides multiple functionalities.
+	3. + beautifulWait.
+	4. + Implemented all requested functionalities, including the "split" for blackjack.
 	
