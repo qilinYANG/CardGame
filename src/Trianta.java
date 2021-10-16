@@ -190,7 +190,7 @@ public class Trianta extends PointGame{
                     give_up_player.add(ppl);
                     System.out.println(ppl.getName()+" give up in this round!");
                 }else{
-                    Double bet_tmp= Utils.safeDoubleInput("Please input the amount of bet you want to add: ",10,ppl.getBalance());
+                    Double bet_tmp= Utils.safeDoubleInput("Please input the amount of bet you want to add (minimum bet is $10): ", 10, ppl.getBalance());
                     ppl.addBet(bet_tmp);
                     System.out.println("Success!");
                 }
