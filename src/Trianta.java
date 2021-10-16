@@ -39,7 +39,7 @@ public class Trianta extends PointGame{
         Utils.beautifulWait(1);
 
         // Configure the non-dealers
-        int initial_balance=Utils.safeIntInput("Please input PLayers' Initial balance(1 ~ 10000): ",1,10000);
+        int initial_balance=Utils.safeIntInput("Please input PLayers' Initial balance($10 ~ $10000): ",10,10000);
         for(PokerPlayer ppl: players){
             if(ppl.isDealer()){// "the dealer adjusts his/her balance accordingly"
                 ppl.setBalance(3*initial_balance);
@@ -186,8 +186,7 @@ public class Trianta extends PointGame{
                 System.out.println("------------------------------------");
                 System.out.println("Player "+ppl.getName()+"   balance: "+ppl.getBalance()+"  bet: "+ppl.getBet());
                 System.out.println("Card: "+ppl.getHand());
-                System.out.println("Do you want to set Bet? If not you will give up in this round. (y/n)");
-                if(scan.next().equals("n")){
+                if(Utils.safeIntInput("Do you want to set Bet? If not you will give up in this round.\n0: Yes!\n1: No.", 0, 1) == 1){
                     give_up_player.add(ppl);
                     System.out.println(ppl.getName()+" give up in this round!");
                 }else{
@@ -227,12 +226,10 @@ public class Trianta extends PointGame{
         ArrayList<PokerPlayer>players_tmp=new ArrayList<>(players);
         for(PokerPlayer ppl: players_tmp){
             if(ppl.getBalance()<10){
-                System.out.println("Player "+ppl.getName()+"'s balance is less than 10$!!! So he cannot continue playing!");
+                System.out.println("Player "+ppl.getName()+"'s balance is less than 10$!!! So he/she cannot continue playing!");
                 players.remove(ppl);
                 Utils.beautifulWait(1);
             }
         }
     }
 }
-
-// "At the end of each round, the player with the largest total cash amount exceeding that of the Banker, is given the option to become the Banker. If they choose to accept, the Player becomes the Banker and current Banker becomes a Player. If they decline the player with the next greatest amount is given the same option, etc."

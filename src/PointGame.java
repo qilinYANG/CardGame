@@ -232,7 +232,7 @@ public class PointGame extends Game {
             dealer.setBalance(dealer.getBalance() - player.getBet());
             // Player clears bet
             player.clearBet();
-            System.out.println(player.getName() + "trumps the Dealer!");
+            System.out.println(player.getName() + " trumps the Dealer!");
         }
 
         // If dealer wins
