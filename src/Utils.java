@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 // A class that provides utility functions.
 public class Utils {
@@ -42,5 +43,21 @@ public class Utils {
             } 
         }
         return double_tmp;
+    }
+
+    // Wait for x seconds with an animation
+    public static void beautifulWait(double seconds) {
+        System.out.print("\n");
+        for (int idx = 0; idx < 20; idx++) {
+            System.out.print("*");
+            try {
+                Thread.sleep((int)(1000 * seconds / 20));
+            }
+            catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        System.out.print("\n");
+        System.out.print("\n");
     }
 }

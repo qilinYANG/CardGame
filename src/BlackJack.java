@@ -9,6 +9,7 @@ public class BlackJack extends PointGame{
 
         // Greetings
         System.out.println("Welcome to BlackJack!\n\nPlease choose:\n1. Player VS Computer\n2. Player VS Player\n");
+        Utils.beautifulWait(1);
 
         // Register players
         registerPlayers(Utils.safeIntInput("Please select 1 or 2: ", 1, 2));
