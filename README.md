@@ -6,40 +6,40 @@
 
 
 ## Description of each class:
-    ###Card:
+    Card:
         A class that abstracts a physical card. Can be set visible or invisible.
 
-    ###PokerCard:
+    PokerCard:
         The abstraction of a poker card. It extends the Card class. A poker card has a suit and a value. The corresponding setters and getters are implemented. In addition, a toString method is provided which can be later used.
 
-    ###Deck:
+    Deck:
         The abstraction of a deck of poker cards. It utilizes the PokerCard class. The Deck provides a range of methods resembling a real deck of cards. For example, the deck can shuffle, pop the first card, and reset to the original state.
 	
-    ###Player:
+    Player:
         The abstraction of general game player. It defines some attributes that a normal player should have, like name and score.
 
-    ###PokerPlayer:
+    PokerPlayer:
         The class of Player in Poker card game, which extends Class Player. It utilizes Class PokerCard to provide basic attributes and functions that can be used in BlackJack and Trianta.
 
-    ###Game:
+    Game:
         The abstraction for a general game. It implements the common functionalities shared among games. For example registering all the players.
 
-    ###PointGame:
+    PointGame:
         Super class define common methods used by BlackJack and Trianta
 
-    ###Utils:
+    Utils:
         A class that provides utility functions.
 
-    ###Menu:
+    Menu:
 	    The entrance class of two games. It utilized the methods StartGame() of BlackJack and Trianta.
         
-    ###Play:
+    Play:
         The entrance class of the whole program this time. It just calls a new Menu Object.
 
-    ###BlackJack:
+    BlackJack:
         The class of Playing BlackJack game, which extends Class PointGame. Class BlackJack contains special game process and game rules just for BlackJack. For example, the method dealerCards() is unique and just for BlackJack rules.
 
-    ###Trianta:
+    Trianta:
         The class of Playing Trianta game, which extends Class PointGame. Class Trianta also contains unique game process and game rules.  For example, the method rotate_dealer() is unique and just for Trianta rules.
 
 
