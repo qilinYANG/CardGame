@@ -17,18 +17,25 @@ Description of each class:
         The abstraction of a deck of poker cards. It utilizes the PokerCard class. The Deck provides a range of methods resembling a real deck of cards. For example, the deck can shuffle, pop the first card, and reset to the original state.
 	
     Player:
+        The abstraction of general game player. It defines some attributes that a normal player should have, like name and score.
         
     PokerPlayer:
+        The class of Player in Poker card game, which extends Class Player. It utilizes Class PokerCard to provide basic attributes and functions that can be used in BlackJack and Trianta.
         
     Game:
-        The abstraction for a general game. It implements the common functionalities shared among games. For example registering 
+        The abstraction for a general game. It implements the common functionalities shared among games. For example registering.
+
     PointGame:
         Super class define common methods used by BlackJack and Trianta
+
     Utils:
         A class that provides utility functions.
+
     Menu:
-        
+        The entrance class of two games. It utilized the methods StartGame() of BlackJack and Trianta.
+
     Play:
+        The entrance class of the whole program this time. It just calls a new Menu Object.
         
     BlackJack:
         The class of Playing BlackJack game, which extends Class PointGame. Class BlackJack contains special game process and game rules just for BlackJack. For example, the method dealerCards() is unique and just for BlackJack rules.
