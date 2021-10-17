@@ -64,7 +64,15 @@ public class PointGame extends Game {
                     // If has exactly two cards
                     boolean condition_2 = ppl.getHand().size() == 2;
                     // If the cards are of the same rank
-                    boolean condition_3 = ppl.getHand().get(0) == ppl.getHand().get(1);
+                    String value1 = ppl.getHand().get(0).getValue();
+                    String value2 = ppl.getHand().get(1).getValue();
+                    if ((value1 == "jack") || (value1 == "queen") || (value1 == "king")) {
+                        value1 = "10";
+                    }
+                    if ((value2 == "jack") || (value2 == "queen") || (value2 == "king")) {
+                        value2 = "10";
+                    }                    
+                    boolean condition_3 = value1 == value2;
                     // otherwise: notify and break (not break out)
                     if (!(condition_1 && condition_2 && condition_3)) {
                         System.out.println("You are not qualified to split!");
